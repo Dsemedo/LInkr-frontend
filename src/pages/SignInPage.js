@@ -11,67 +11,67 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-
-  async function register (event) {
+  async function register(event) {
     event.preventDefault()
     setLoading(true)
-    try{
-        const request = await axios.post(`${BASE_URL}/sign-in`, registry)
-        localStorage.setItem('Bearer', request.data)
-    } catch(error){
-        setLoading(false)
-        if (error.response.status === 422) {
-          alert(error.response.data)
-        }
-        if (error.response.status === 409) {
-          alert(error.response.data)
-        }
-        if (error.response.status === 401) {
-          alert(error.response.data)
-        }
-        console.log(error)
+    try {
+      const request = await axios.post(`${BASE_URL}/sign-in`, registry)
+      localStorage.setItem("Bearer", request.data)
+      navigate("/timeline")
+    } catch (error) {
+      setLoading(false)
+      if (error.response.status === 422) {
+        alert(error.response.data)
+      }
+      if (error.response.status === 409) {
+        alert(error.response.data)
+      }
+      if (error.response.status === 401) {
+        alert(error.response.data)
+      }
+      console.log(error)
     }
-    navigate("/atividades")
   }
 
   return (
     <Container>
-        <LeftSide></LeftSide>
-        <RightSide>
+      <LeftSide></LeftSide>
+      <RightSide>
         <form onSubmit={register}>
-        <input
-        data-identifier="input-email"
-          placeholder="e-mail"
-          type="email"
-          required
-          disabled={loading}         
-          onChange={(e) => setRegistry({ ...registry, email: e.target.value })}
-        />
-        <input
-        data-identifier="input-password"
-          placeholder="password"
-          type="password"
-          required
-          disabled={loading}
-          onChange={(e) =>
-            setRegistry({ ...registry, password: e.target.value })
-          }
-        />
-        <button type="submit" data-identifier="login-btn">
-          {loading ? <ThreeDots color="white" height="10px"/> : "Entrar"}
+          <input
+            data-identifier="input-email"
+            placeholder="e-mail"
+            type="email"
+            required
+            disabled={loading}
+            onChange={(e) =>
+              setRegistry({ ...registry, email: e.target.value })
+            }
+          />
+          <input
+            data-identifier="input-password"
+            placeholder="password"
+            type="password"
+            required
+            disabled={loading}
+            onChange={(e) =>
+              setRegistry({ ...registry, password: e.target.value })
+            }
+          />
+          <button type="submit" data-identifier="login-btn">
+            {loading ? <ThreeDots color="white" height="10px" /> : "Entrar"}
           </button>
-      </form>
-      <Link to={`/cadastro`}>
-        <p data-identifier="sign-up-action">First time? Create an account!</p>
-      </Link>
-        </RightSide>
-      
+        </form>
+        <Link to={`/cadastro`}>
+          <p data-identifier="sign-up-action">First time? Create an account!</p>
+        </Link>
+      </RightSide>
     </Container>
   )
 }
 
 const Container = styled.div`
-display: flex;
+  display: flex;
 `
 
 const RightSide = styled.div`
@@ -83,13 +83,14 @@ const RightSide = styled.div`
   height: 100vh;
   background-color: ${grey};
   form {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
   }
   input {
-    width: 303px;
+    width: 70%;
     height: 45px;
     border: 1px solid #d5d5d5;
     border-radius: 5px;
@@ -97,14 +98,14 @@ const RightSide = styled.div`
     font-size: 19.976px;
     margin-bottom: 6px;
     outline: none;
-    background-color:'#ffffff';
+    background-color: "#ffffff";
     padding-left: 11px;
   }
   input::placeholder {
-    color: '#dbdbdb';
+    color: "#dbdbdb";
   }
   button {
-    width: 303px;
+    width: 70%;
     height: 45px;
     background: ${blue};
     border-radius: 4.63636px;
@@ -130,7 +131,7 @@ const RightSide = styled.div`
 `
 
 const LeftSide = styled.div`
-background-color: ${black};
-width: 65%;
-height: 100vh;
+  background-color: ${black};
+  width: 65%;
+  height: 100vh;
 `

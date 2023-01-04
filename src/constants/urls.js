@@ -1,2 +1,2 @@
-export const BASE_URL = 'localhost:4001'
+export const BASE_URL = 'https://api-linkr-eivv.onrender.com'
 
