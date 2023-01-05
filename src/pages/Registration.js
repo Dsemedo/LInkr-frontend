@@ -17,7 +17,7 @@ export default function Login() {
     try {
       const request = await axios.post(`${BASE_URL}/sign-up`, registry);
       localStorage.setItem("Bearer", request.data);
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       setLoading(false);
       if (error.response.status === 404) {
