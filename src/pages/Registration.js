@@ -82,7 +82,7 @@ export default function Login() {
             {loading ? <ThreeDots color="white" height="10px" /> : "Sign Up"}
           </button>
         </form>
-        <Link to={`/login`}>
+        <Link to={`/`}>
           <p data-identifier="sign-up-action">Switch back to log in</p>
         </Link>
       </RightSide>

@@ -1,10 +1,13 @@
-import styled from "styled-components";
-import { useState } from "react";
-import arrowUp from "../assets/images/ArrowUp.png";
-import arrowDown from "../assets/images/ArrowDown.png";
+import styled from "styled-components"
+import { useState } from "react"
+import arrowUp from "../assets/images/ArrowUp.png"
+import arrowDown from "../assets/images/ArrowDown.png"
+import { useNavigate } from "react-router-dom"
+import { async } from "q"
 
 export default function LogoutButton() {
-  const [logoutClicked, setLogoutClicked] = useState(false);
+  const [logoutClicked, setLogoutClicked] = useState(false)
+  const navigate = useNavigate()
 
   return (
     <>
@@ -18,7 +21,14 @@ export default function LogoutButton() {
             />
             <UserLogout />
           </ContainerLogout>
-          <LogoutButt>Logout</LogoutButt>
+          <LogoutButt
+            onClick={ async () => {
+              localStorage.removeItem("Bearer")
+              navigate("/")
+            }}
+          >
+            Logout
+          </LogoutButt>
         </Logout>
       ) : (
         <Logout flex={`row`} height={`100%`}>
@@ -31,7 +41,7 @@ export default function LogoutButton() {
         </Logout>
       )}
     </>
-  );
+  )
 }
 
 const Logout = styled.div`
@@ -48,21 +58,25 @@ const Logout = styled.div`
     width: 20%;
     height: 20%;
   }
-`;
+`
 
 const UserLogout = styled.image`
   height: 85%;
   width: 42%;
   border-radius: 50%;
   background-color: green;
-`;
+`
 
 const LogoutButt = styled.div`
-  height: 20px;
+  display: flex;
+  align-items: center;
+  padding-left: 10%;
+  height: 40px;
   width: 100%;
   background-color: white;
   border-radius: 10px;
-`;
+  cursor: pointer;
+`
 
 const ContainerLogout = styled.div`
   display: flex;
@@ -72,4 +86,4 @@ const ContainerLogout = styled.div`
   height: 100%;
 
   margin-bottom: 1%;
-`;
+`
