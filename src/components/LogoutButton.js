@@ -3,7 +3,6 @@ import { useState } from "react"
 import arrowUp from "../assets/images/ArrowUp.png"
 import arrowDown from "../assets/images/ArrowDown.png"
 import { useNavigate } from "react-router-dom"
-import { async } from "q"
 
 export default function LogoutButton() {
   const [logoutClicked, setLogoutClicked] = useState(false)
