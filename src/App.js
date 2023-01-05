@@ -1,6 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import GlobalStyles from "./assets/styles/GlobalStyle.js";
+import Login from "./pages/SignInPage.js";
 import Timeline from "./pages/TimelinePage.js";
+import Registration from "./pages/Registration.js"
 
 function App() {
   return (
@@ -8,6 +10,8 @@ function App() {
       <GlobalStyles />
       <Routes>
         <Route path="/timeline" element={<Timeline />} />
+        <Route path="/login" element={<Login />} />
+         <Route path="/registration" element={<Registration />} />
       </Routes>
     </BrowserRouter>
   );
