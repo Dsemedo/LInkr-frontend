@@ -1,51 +1,97 @@
 import styled from "styled-components";
+import Header from "../components/Header";
+import Post from "../components/Post";
+import axios from "axios";
+import { useEffect, useState, useContext } from "react";
+import context from "../contexts/context.js";
+import { BASE_URL } from "../constants/urls"
 
-export default function timeline() {
+
+export default function TimelinePage() {
+  const { config } = useContext(context);
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const promise = axios.get(`${BASE_URL}/timeline`, config);
+    promise.then((res) => {
+      setPosts(res.data);
+    });
+    promise.catch((err) => {
+      console.log(err);
+    });
+  });
+
   return (
     <>
-      <Header></Header>
-      <ContainerTimeline>
+      <Header />
+      <Container>
         <Timeline>
           <h1>timeline</h1>
-          <CurrentPost></CurrentPost>
+          <ContainerTimeline>
+            <Posts>
+              <CurrentPost></CurrentPost>
+              {posts.map((p)=> <Post username={p.username} picture={p.picture} description={p.description} link={p.link}/>)}
+            </Posts>
+            <Trendings>
+              <h1>trending</h1>
+            </Trendings>
+          </ContainerTimeline>
         </Timeline>
-        <Trendings></Trendings>
-      </ContainerTimeline>
+      </Container>
     </>
   );
 }
 
-const Header = styled.div`
-  width: 100vw;
-  height: 5vw;
-  background-color: blue;
-`;
-
-const ContainerTimeline = styled.div`
+const Container = styled.div`
   padding-top: 10vh;
   display: flex;
   flex-direction: row;
   justify-content: center;
   width: 100vw;
-  background-color: yellow;
+  background-color: #333333;
 `;
 
 const Timeline = styled.div`
-  width: 50vw;
+  width: 75vw;
   height: 90vh;
-  background-color: red;
+  background-color: #333333;
+  h1 {
+    font-family: "Oswald", cursive;
+    color: white;
+    font-size: 43px;
+  }
+`;
+
+const ContainerTimeline = styled.div`
+  background-color: #333333;
+  display: flex;
+  margin: 43px 0;
+`;
+
+const Posts = styled.div`
+  width: 65vw;
+  height: 85vh;
+  background-color: #333333;
+`;
+
+const CurrentPost = styled.div`
+  height: 210px;
+  width: 100%;
+  margin: 0 0 15px 0;
+  border-radius: 16px;
+  background-color: white;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
 const Trendings = styled.div`
   width: 25vw;
   height: 60vh;
-  margin-left: 10vh;
-  border-radius: 4%;
-  background-color: blue;
-`;
-
-const CurrentPost = styled.div`
-  height: 40%;
-  width: 100%;
-  background-color: black;
+  margin-left: 3vh;
+  border-radius: 16px;
+  background-color: #171717;
+  padding: 9px 16px;
+  h1 {
+    font-family: "Oswald", cursive;
+    font-size: 27px;
+  }
 `;

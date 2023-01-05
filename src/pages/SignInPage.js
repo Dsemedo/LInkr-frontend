@@ -1,35 +1,42 @@
-import styled from "styled-components"
-import { black, grey, blue } from "../constants/colors"
-import { useState } from "react"
-import axios from "axios"
-import { BASE_URL } from "../constants/urls"
-import { Link, useNavigate } from "react-router-dom"
-import { ThreeDots } from "react-loader-spinner"
+import styled from "styled-components";
+import { black, grey, blue } from "../constants/colors";
+import { useState, useContext } from "react";
+import context from "../contexts/context";
+import axios from "axios";
+import { BASE_URL } from "../constants/urls";
+import { Link, useNavigate } from "react-router-dom";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function Login() {
-  const [registry, setRegistry] = useState()
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  const [registry, setRegistry] = useState();
+  const [loading, setLoading] = useState(false);
+  const { setConfig } = useContext(context);
+  const navigate = useNavigate();
 
   async function register(event) {
-    event.preventDefault()
-    setLoading(true)
+    event.preventDefault();
+    setLoading(true);
     try {
-      const request = await axios.post(`${BASE_URL}/sign-in`, registry)
-      localStorage.setItem("Bearer", request.data)
-      navigate("/timeline")
+      const request = await axios.post(`${BASE_URL}/sign-in`, registry);
+      localStorage.setItem("Bearer", request.data);
+      setConfig({
+        headers: {
+          Authorization: `Bearer ${request.data}`,
+        },
+      });
+      navigate("/timeline");
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       if (error.response.status === 422) {
-        alert(error.response.data)
+        alert(error.response.data);
       }
       if (error.response.status === 409) {
-        alert(error.response.data)
+        alert(error.response.data);
       }
       if (error.response.status === 401) {
-        alert(error.response.data)
+        alert(error.response.data);
       }
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -67,12 +74,12 @@ export default function Login() {
         </Link>
       </RightSide>
     </Container>
-  )
+  );
 }
 
 const Container = styled.div`
   display: flex;
-`
+`;
 
 const RightSide = styled.div`
   display: flex;
@@ -128,10 +135,10 @@ const RightSide = styled.div`
     margin-top: 25px;
     text-decoration: none;
   }
-`
+`;
 
 const LeftSide = styled.div`
   background-color: ${black};
   width: 65%;
   height: 100vh;
-`
+`;
