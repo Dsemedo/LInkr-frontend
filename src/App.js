@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import GlobalStyles from "./assets/styles/GlobalStyle.js";
-import Timeline from "./pages/timeline/TimelinePage.js";
+import Timeline from "./pages/TimelinePage.js";
 
 function App() {
   return (

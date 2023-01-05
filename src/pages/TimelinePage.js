@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
-import LogoutButton from "./LogoutButton.js";
+import LogoutButton from "../components/LogoutButton.js";
 
 export default function Timeline() {
   const [link, setLink] = useState("");

@@ -1,8 +1,7 @@
 import styled from "styled-components";
-
 import { useState } from "react";
-import arrowUp from "../../assets/images/ArrowUp.png";
-import arrowDown from "../../assets/images/ArrowDown.png";
+import arrowUp from "../assets/images/ArrowUp.png";
+import arrowDown from "../assets/images/ArrowDown.png";
 
 export default function LogoutButton() {
   const [logoutClicked, setLogoutClicked] = useState(false);
