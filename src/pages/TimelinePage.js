@@ -5,21 +5,23 @@ import arrowUp from "../assets/images/ArrowUp.png";
 import arrowDown from "../assets/images/ArrowDown.png";
 
 export default function Timeline() {
-
   const [link, setLink] = useState("");
   const [linkDescription, setLinkDescription] = useState("");
   const [logoutClicked, setLogoutClicked] = useState(false);
+  const [publishClicked, setPublishClicked] = useState(false);
 
   async function postLinkr(e) {
     e.preventDefault();
+    setPublishClicked(true);
     const body = { link, linkDescription };
     axios
       .post("https://api-linkr-eivv.onrender.com/timeline", body)
       .then((response) => {
         response.sendStatus(200);
       })
-      .catch((error) => {
-        console.error("Erro ao fazer login");
+      .catch(() => {
+        alert("Houve um erro ao publicar seu link");
+        setPublishClicked(false);
       });
   }
 
@@ -52,21 +54,49 @@ export default function Timeline() {
           <h1>timeline</h1>
           <CurrentPost>
             <UserImage />
-            <Description>
-              <h2>What are you going to share today?</h2>
-              <InputLink
-                placeholder="http://..."
-                required
-                onChange={(e) => setLink(e.target.value)}
-                value={link}
-              />
-              <InputDescription
-                placeholder="Awesome article about #javascript"
-                onChange={(e) => setLinkDescription(e.target.value)}
-                value={linkDescription}
-              />
-              <PublishButt onClick={postLinkr}>Publish</PublishButt>
-            </Description>
+            {publishClicked ? (
+              <Description>
+                <h2>What are you going to share today?</h2>
+                <InputLink
+                  placeholder="http://..."
+                  required
+                  onChange={(e) => setLink(e.target.value)}
+                  value={link}
+                  disabled
+                />
+                <InputDescription
+                  placeholder="Awesome article about #javascript"
+                  onChange={(e) => setLinkDescription(e.target.value)}
+                  value={linkDescription}
+                  disabled
+                />
+                <PublishButt disabled color={`#333333`} cursor={""}>
+                  Publishing...
+                </PublishButt>
+              </Description>
+            ) : (
+              <Description>
+                <h2>What are you going to share today?</h2>
+                <InputLink
+                  placeholder="http://..."
+                  required
+                  onChange={(e) => setLink(e.target.value)}
+                  value={link}
+                />
+                <InputDescription
+                  placeholder="Awesome article about #javascript"
+                  onChange={(e) => setLinkDescription(e.target.value)}
+                  value={linkDescription}
+                />
+                <PublishButt
+                  onClick={postLinkr}
+                  color={`#1877F2`}
+                  cursor={"pointer"}
+                >
+                  Publish
+                </PublishButt>
+              </Description>
+            )}
           </CurrentPost>
         </TimelinePosts>
         <Trendings>
@@ -183,7 +213,7 @@ const InputDescription = styled.input`
 `;
 
 const PublishButt = styled.button`
-  background-color: #1877f2;
+  background-color: ${(props) => props.color};
   margin: 3% 0 0 80%;
   width: 8vw;
   height: 4vh;
@@ -194,7 +224,7 @@ const PublishButt = styled.button`
   font-weight: 700;
   font-size: 14px;
   line-height: 17px;
-  cursor: pointer;
+  cursor: ${(props) => props.cursor};
 `;
 
 const Logout = styled.div`
