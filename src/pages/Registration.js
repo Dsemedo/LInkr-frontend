@@ -35,7 +35,16 @@ export default function Login() {
 
   return (
     <Container>
-      <LeftSide></LeftSide>
+      <LeftSide>
+        <BoxLogo>
+          <TextLogo>linkr</TextLogo>
+          <BoxDescription>
+            <TextDescription>
+              save, share and discover the best links on the web
+            </TextDescription>
+          </BoxDescription>
+        </BoxLogo>
+      </LeftSide>
       <RightSide>
         <form onSubmit={register}>
           <input
@@ -122,7 +131,11 @@ const RightSide = styled.div`
     padding-left: 11px;
   }
   input::placeholder {
-    color: "#dbdbdb";
+    color: "#9F9F9F";
+    font-family: "Oswald";
+    font-style: normal;
+    font-weight: 300;
+    font-size: 27px;
   }
   button {
     width: 70%;
@@ -130,8 +143,9 @@ const RightSide = styled.div`
     background: ${blue};
     border-radius: 4.63636px;
     border: none;
+    font-family: "Oswald";
     font-weight: 400;
-    font-size: 20.976px;
+    font-size: 27px;
     color: #ffffff;
     cursor: pointer;
     display: flex;
@@ -142,11 +156,13 @@ const RightSide = styled.div`
     margin-bottom: 40px;
   }
   p {
-    font-weight: 700;
-    font-size: 13.976px;
-    color: white;
-    margin-top: 25px;
-    text-decoration: none;
+    font-family: "Lato";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    text-decoration-line: underline;
+    color: #FFFFFF
   }
 `;
 
@@ -154,4 +170,32 @@ const LeftSide = styled.div`
   background-color: ${black};
   width: 65%;
   height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const BoxLogo = styled.div`
+  width: 60%;
+  height: 40vh;
+`;
+const TextLogo = styled.text`
+  font-family: "Passion One";
+  font-size: 106px;
+  font-weight: 700;
+  line-height: 117px;
+  text-align: left;
+  color: #ffffff;
+`;
+const BoxDescription = styled.div`
+  width: 65%;
+  height: 50vh;
+`;
+const TextDescription = styled.text`
+  font-family: "Oswald";
+  font-size: 43px;
+  font-weight: 700;
+  line-height: 64px;
+  text-align: left;
+  color: #ffffff;
 `;
