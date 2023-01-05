@@ -1,13 +1,11 @@
 import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
-import arrowUp from "../assets/images/ArrowUp.png";
-import arrowDown from "../assets/images/ArrowDown.png";
+import LogoutButton from "./LogoutButton.js";
 
 export default function Timeline() {
   const [link, setLink] = useState("");
   const [linkDescription, setLinkDescription] = useState("");
-  const [logoutClicked, setLogoutClicked] = useState(false);
   const [publishClicked, setPublishClicked] = useState(false);
 
   async function postLinkr(e) {
@@ -17,6 +15,8 @@ export default function Timeline() {
     axios
       .post("https://api-linkr-eivv.onrender.com/timeline", body)
       .then((response) => {
+        setLinkDescription("");
+        setLink("");
         response.sendStatus(200);
       })
       .catch(() => {
@@ -29,25 +29,7 @@ export default function Timeline() {
     <Container>
       <Header>
         <h1>linkr</h1>
-        {logoutClicked ? (
-          <Logout>
-            <img
-              alt="seta para cima"
-              src={arrowUp}
-              onClick={() => setLogoutClicked(false)}
-            />
-            <UserLogout />
-          </Logout>
-        ) : (
-          <Logout>
-            <img
-              alt="seta para baixo"
-              src={arrowDown}
-              onClick={() => setLogoutClicked(true)}
-            />
-            <UserLogout />
-          </Logout>
-        )}
+        <LogoutButton />
       </Header>
       <ContainerTimeline>
         <TimelinePosts>
@@ -158,6 +140,7 @@ const Trendings = styled.div`
   margin: 5% 0 0 5vw;
   border-radius: 4%;
   background-color: #171717;
+  overflow: hidden;
 
   h1 {
     font-family: "Oswald", sans-serif;
@@ -176,11 +159,13 @@ const CurrentPost = styled.div`
   display: flex;
   justify-content: space-around;
   flex-direction: row;
+
+  overflow: hidden;
 `;
 
 const UserImage = styled.image`
   height: 27%;
-  width: 10%;
+  width: 11%;
   border-radius: 50%;
   background-color: green;
 `;
@@ -225,26 +210,4 @@ const PublishButt = styled.button`
   font-size: 14px;
   line-height: 17px;
   cursor: ${(props) => props.cursor};
-`;
-
-const Logout = styled.div`
-  width: 10vw;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-  margin-right: 1%;
-
-  img {
-    width: 20%;
-    height: 20%;
-  }
-`;
-
-const UserLogout = styled.image`
-  height: 85%;
-  width: 4.3vw;
-  border-radius: 50%;
-  background-color: green;
 `;
