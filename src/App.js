@@ -10,7 +10,7 @@ function App() {
       <GlobalStyles />
       <Routes>
         <Route path="/timeline" element={<Timeline />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
          <Route path="/registration" element={<Registration />} />
       </Routes>
     </BrowserRouter>

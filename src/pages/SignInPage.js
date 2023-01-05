@@ -27,7 +27,12 @@ export default function Login() {
         alert(error.response.data)
       }
       if (error.response.status === 401) {
-        alert(error.response.data)
+        alert(`${error.response.data}
+        e-mail ou senha incorretos`)
+      }
+      if (error.response.status === 404) {
+        alert(`${error.response.data}
+        e-mail ou senha incorretos`)
       }
       console.log(error)
     }
@@ -62,8 +67,8 @@ export default function Login() {
             {loading ? <ThreeDots color="white" height="10px" /> : "Entrar"}
           </button>
         </form>
-        <Link to={`/cadastro`}>
-          <p data-identifier="sign-up-action">First time? Create an account!</p>
+        <Link to={`/registration`}>
+          <p>First time? Create an account!</p>
         </Link>
       </RightSide>
     </Container>
