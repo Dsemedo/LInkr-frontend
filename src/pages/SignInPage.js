@@ -41,7 +41,7 @@ export default function Login() {
   return (
     <Container>
       <LeftSide>
-      <BoxLogo>
+        <BoxLogo>
           <TextLogo>linkr</TextLogo>
           <BoxDescription>
             <TextDescription>
@@ -72,9 +72,9 @@ export default function Login() {
               setRegistry({ ...registry, password: e.target.value })
             }
           />
-          <button type="submit" data-identifier="login-btn">
+          <Button disabled={loading} type="submit" data-identifier="login-btn">
             {loading ? <ThreeDots color="white" height="10px" /> : "Entrar"}
-          </button>
+          </Button>
         </form>
         <Link to={`/registration`}>
           <p>First time? Create an account!</p>
@@ -122,21 +122,6 @@ const RightSide = styled.div`
     font-weight: 300;
     font-size: 27px;
   }
-  button {
-    width: 70%;
-    height: 45px;
-    background: ${blue};
-    border-radius: 4.63636px;
-    border: none;
-    font-family: "Oswald";
-    font-weight: 400;
-    font-size: 27px;
-    color: #ffffff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
   img {
     margin-bottom: 40px;
   }
@@ -147,8 +132,23 @@ const RightSide = styled.div`
     font-size: 20px;
     line-height: 24px;
     text-decoration-line: underline;
-    color: #FFFFFF
+    color: #ffffff;
   }
+`
+const Button = styled.button`
+  width: 70%;
+  height: 45px;
+  background: ${blue};
+  border-radius: 4.63636px;
+  border: none;
+  font-family: "Oswald";
+  font-weight: 400;
+  font-size: 27px;
+  color: #ffffff;
+  cursor: ${(props) => (props.disabled ? "default" : "pointer")};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 const LeftSide = styled.div`
@@ -158,12 +158,11 @@ const LeftSide = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
+`
 const BoxLogo = styled.div`
   width: 60%;
   height: 40vh;
-  
-`;
+`
 const TextLogo = styled.text`
   font-family: "Passion One";
   font-size: 106px;
@@ -171,11 +170,11 @@ const TextLogo = styled.text`
   line-height: 117px;
   text-align: left;
   color: #ffffff;
-`;
+`
 const BoxDescription = styled.div`
   width: 65%;
   height: 50vh;
-`;
+`
 const TextDescription = styled.text`
   font-family: "Oswald";
   font-size: 43px;
@@ -183,5 +182,4 @@ const TextDescription = styled.text`
   line-height: 64px;
   text-align: left;
   color: #ffffff;
-`;
-
+`
