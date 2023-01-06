@@ -87,9 +87,9 @@ export default function Login() {
               setRegistry({ ...registry, picture: e.target.value })
             }
           />
-          <button type="submit" data-identifier="login-btn">
+          <Button disabled={loading} type="submit" data-identifier="login-btn">
             {loading ? <ThreeDots color="white" height="10px" /> : "Sign Up"}
-          </button>
+          </Button>
         </form>
         <Link to={`/`}>
           <p data-identifier="sign-up-action">Switch back to log in</p>
@@ -137,21 +137,6 @@ const RightSide = styled.div`
     font-weight: 300;
     font-size: 27px;
   }
-  button {
-    width: 70%;
-    height: 45px;
-    background: ${blue};
-    border-radius: 4.63636px;
-    border: none;
-    font-family: "Oswald";
-    font-weight: 400;
-    font-size: 27px;
-    color: #ffffff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
   img {
     margin-bottom: 40px;
   }
@@ -165,6 +150,22 @@ const RightSide = styled.div`
     color: #FFFFFF
   }
 `;
+
+const Button = styled.button`
+  width: 70%;
+  height: 45px;
+  background: ${blue};
+  border-radius: 4.63636px;
+  border: none;
+  font-family: "Oswald";
+  font-weight: 400;
+  font-size: 27px;
+  color: #ffffff;
+  cursor: ${(props) => (props.disabled ? "default" : "pointer")};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
 
 const LeftSide = styled.div`
   background-color: ${black};

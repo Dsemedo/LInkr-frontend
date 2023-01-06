@@ -5,6 +5,7 @@ import Timeline from "./pages/TimelinePage.js";
 import Registration from "./pages/Registration.js"
 
 function App() {
+
   return (
     <BrowserRouter>
       <GlobalStyles />
