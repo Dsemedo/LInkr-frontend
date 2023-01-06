@@ -1,25 +1,43 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import LogoutButton from "../components/LogoutButton.js";
+import { BASE_URL } from "../constants/urls.js";
 
 export default function Timeline() {
   const [link, setLink] = useState("");
-  const [linkDescription, setLinkDescription] = useState("");
+  const [description, setDescription] = useState("");
   const [publishClicked, setPublishClicked] = useState(false);
+  // const [imageUser, setImageUser] = useState("");
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
+      },
+    };
+    axios.get(`http://localhost:4000/timeline`, config).then((res) => {
+      console.log(res.data);
+    });
+  }, []);
 
   async function postLinkr(e) {
     e.preventDefault();
     setPublishClicked(true);
-    const body = { link, linkDescription };
+    const body = { link, description };
+    console.log(body);
     axios
-      .post("https://api-linkr-eivv.onrender.com/timeline", body)
+      .post(`http://localhost:4000/timeline`, body, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
+        },
+      })
       .then((response) => {
-        setLinkDescription("");
+        setDescription("");
         setLink("");
         response.sendStatus(200);
       })
-      .catch(() => {
+      .catch((erro) => {
         alert("Houve um erro ao publicar seu link");
         setPublishClicked(false);
       });
@@ -48,8 +66,8 @@ export default function Timeline() {
                 />
                 <InputDescription
                   placeholder="Awesome article about #javascript"
-                  onChange={(e) => setLinkDescription(e.target.value)}
-                  value={linkDescription}
+                  onChange={(e) => setDescription(e.target.value)}
+                  value={description}
                   disabled
                 />
                 <PublishButt disabled color={`#333333`} cursor={""}>
@@ -67,8 +85,8 @@ export default function Timeline() {
                 />
                 <InputDescription
                   placeholder="Awesome article about #javascript"
-                  onChange={(e) => setLinkDescription(e.target.value)}
-                  value={linkDescription}
+                  onChange={(e) => setDescription(e.target.value)}
+                  value={description}
                 />
                 <PublishButt
                   onClick={postLinkr}
