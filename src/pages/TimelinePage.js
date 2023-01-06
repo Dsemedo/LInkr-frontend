@@ -8,6 +8,7 @@ export default function Timeline() {
   const [link, setLink] = useState("");
   const [description, setDescription] = useState("");
   const [publishClicked, setPublishClicked] = useState(false);
+  const [logoutClicked, setLogoutClicked] = useState(false);
   // const [imageUser, setImageUser] = useState("");
 
   useEffect(() => {
@@ -44,10 +45,13 @@ export default function Timeline() {
   }
 
   return (
-    <Container>
+    <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
       <Header>
         <h1>linkr</h1>
-        <LogoutButton />
+        <LogoutButton
+          logoutClicked={logoutClicked}
+          setLogoutClicked={setLogoutClicked}
+        />
       </Header>
       <ContainerTimeline>
         <TimelinePosts>

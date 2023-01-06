@@ -1,11 +1,9 @@
 import styled from "styled-components"
-import { useState } from "react"
 import arrowUp from "../assets/images/ArrowUp.png"
 import arrowDown from "../assets/images/ArrowDown.png"
 import { useNavigate } from "react-router-dom"
 
-export default function LogoutButton() {
-  const [logoutClicked, setLogoutClicked] = useState(false)
+export default function LogoutButton({logoutClicked, setLogoutClicked}) {
   const navigate = useNavigate()
 
   return (
@@ -18,7 +16,7 @@ export default function LogoutButton() {
               src={arrowUp}
               onClick={() => setLogoutClicked(false)}
             />
-            <UserLogout />
+            <UserLogout onClick={() => setLogoutClicked(!logoutClicked)}/>
           </ContainerLogout>
           <LogoutButt
             onClick={ async () => {
@@ -36,7 +34,7 @@ export default function LogoutButton() {
             src={arrowDown}
             onClick={() => setLogoutClicked(true)}
           />
-          <UserLogout />
+          <UserLogout onClick={() => setLogoutClicked(!logoutClicked)}/>
         </Logout>
       )}
     </>

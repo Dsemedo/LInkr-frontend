@@ -17,7 +17,7 @@ export default function Login() {
     try {
       const request = await axios.post(`${BASE_URL}/sign-up`, registry);
       localStorage.setItem("Bearer", request.data);
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       setLoading(false);
       if (error.response.status === 404) {
@@ -35,7 +35,16 @@ export default function Login() {
 
   return (
     <Container>
-      <LeftSide></LeftSide>
+      <LeftSide>
+        <BoxLogo>
+          <TextLogo>linkr</TextLogo>
+          <BoxDescription>
+            <TextDescription>
+              save, share and discover the best links on the web
+            </TextDescription>
+          </BoxDescription>
+        </BoxLogo>
+      </LeftSide>
       <RightSide>
         <form onSubmit={register}>
           <input
@@ -78,9 +87,9 @@ export default function Login() {
               setRegistry({ ...registry, picture: e.target.value })
             }
           />
-          <button type="submit" data-identifier="login-btn">
+          <Button disabled={loading} type="submit" data-identifier="login-btn">
             {loading ? <ThreeDots color="white" height="10px" /> : "Sign Up"}
-          </button>
+          </Button>
         </form>
         <Link to={`/`}>
           <p data-identifier="sign-up-action">Switch back to log in</p>
@@ -122,36 +131,72 @@ const RightSide = styled.div`
     padding-left: 11px;
   }
   input::placeholder {
-    color: "#dbdbdb";
-  }
-  button {
-    width: 70%;
-    height: 45px;
-    background: ${blue};
-    border-radius: 4.63636px;
-    border: none;
-    font-weight: 400;
-    font-size: 20.976px;
-    color: #ffffff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    color: "#9F9F9F";
+    font-family: "Oswald";
+    font-style: normal;
+    font-weight: 300;
+    font-size: 27px;
   }
   img {
     margin-bottom: 40px;
   }
   p {
-    font-weight: 700;
-    font-size: 13.976px;
-    color: white;
-    margin-top: 25px;
-    text-decoration: none;
+    font-family: "Lato";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    text-decoration-line: underline;
+    color: #FFFFFF
   }
 `;
+
+const Button = styled.button`
+  width: 70%;
+  height: 45px;
+  background: ${blue};
+  border-radius: 4.63636px;
+  border: none;
+  font-family: "Oswald";
+  font-weight: 400;
+  font-size: 27px;
+  color: #ffffff;
+  cursor: ${(props) => (props.disabled ? "default" : "pointer")};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
 
 const LeftSide = styled.div`
   background-color: ${black};
   width: 65%;
   height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const BoxLogo = styled.div`
+  width: 60%;
+  height: 40vh;
+`;
+const TextLogo = styled.text`
+  font-family: "Passion One";
+  font-size: 106px;
+  font-weight: 700;
+  line-height: 117px;
+  text-align: left;
+  color: #ffffff;
+`;
+const BoxDescription = styled.div`
+  width: 65%;
+  height: 50vh;
+`;
+const TextDescription = styled.text`
+  font-family: "Oswald";
+  font-size: 43px;
+  font-weight: 700;
+  line-height: 64px;
+  text-align: left;
+  color: #ffffff;
 `;
