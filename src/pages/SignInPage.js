@@ -16,7 +16,7 @@ export default function Login() {
     setLoading(true);
     try {
       const request = await axios.post(`${BASE_URL}/sign-in`, registry);
-      localStorage.setItem("Bearer", request.data);
+      localStorage.setItem("Bearer", request.data.token);
       navigate("/timeline");
     } catch (error) {
       setLoading(false);

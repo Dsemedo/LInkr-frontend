@@ -1,14 +1,14 @@
-import styled from "styled-components";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import LogoutButton from "../components/LogoutButton.js";
-import { BASE_URL } from "../constants/urls.js";
+import styled from "styled-components"
+import { useEffect, useState } from "react"
+import axios from "axios"
+import LogoutButton from "../components/LogoutButton.js"
+import { BASE_URL } from "../constants/urls.js"
 
 export default function Timeline() {
-  const [link, setLink] = useState("");
-  const [description, setDescription] = useState("");
-  const [publishClicked, setPublishClicked] = useState(false);
-  const [logoutClicked, setLogoutClicked] = useState(false);
+  const [link, setLink] = useState("")
+  const [description, setDescription] = useState("")
+  const [publishClicked, setPublishClicked] = useState(false)
+  const [logoutClicked, setLogoutClicked] = useState(false)
   // const [imageUser, setImageUser] = useState("");
 
   useEffect(() => {
@@ -16,32 +16,38 @@ export default function Timeline() {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
       },
-    };
-    axios.get(`http://localhost:4000/timeline`, config).then((res) => {
-      console.log(res.data);
-    });
-  }, []);
+    }
+    axios
+      .get(`${BASE_URL}/timeline`, config)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((erro) => {
+        console.log(erro)
+      })
+  }, [])
 
   async function postLinkr(e) {
-    e.preventDefault();
-    setPublishClicked(true);
-    const body = { link, description };
-    console.log(body);
-    axios
-      .post(`http://localhost:4000/timeline`, body, {
+    e.preventDefault()
+    setPublishClicked(true)
+    const body = { link, description }
+    try{
+      const timelineData = await axios
+      .post(`${BASE_URL}/timeline`, body, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
         },
       })
-      .then((response) => {
-        setDescription("");
-        setLink("");
-        response.sendStatus(200);
-      })
-      .catch((erro) => {
-        alert("Houve um erro ao publicar seu link");
-        setPublishClicked(false);
-      });
+      setDescription("")
+      setLink("")
+      console.log(timelineData)
+      alert("oi")
+    } catch(err){
+      alert("Houve um erro ao publicar seu link")
+      console.log(err)
+      setPublishClicked(false)
+    }
+
   }
 
   return (
@@ -108,7 +114,7 @@ export default function Timeline() {
         </Trendings>
       </ContainerTimeline>
     </Container>
-  );
+  )
 }
 
 const Container = styled.div`
@@ -117,7 +123,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #333333;
-`;
+`
 
 const Header = styled.div`
   height: 10vh;
@@ -133,7 +139,7 @@ const Header = styled.div`
     color: white;
     margin-left: 2%;
   }
-`;
+`
 
 const ContainerTimeline = styled.div`
   padding-top: 3%;
@@ -142,7 +148,7 @@ const ContainerTimeline = styled.div`
   justify-content: center;
   width: 100%;
   height: 60%;
-`;
+`
 
 const TimelinePosts = styled.div`
   width: 50%;
@@ -154,7 +160,7 @@ const TimelinePosts = styled.div`
     font-size: 43px;
     margin: 0 0 5% 0;
   }
-`;
+`
 
 const Trendings = styled.div`
   width: 25%;
@@ -170,7 +176,7 @@ const Trendings = styled.div`
     font-size: 35px;
     margin: 4%;
   }
-`;
+`
 
 const CurrentPost = styled.div`
   height: 40%;
@@ -183,14 +189,14 @@ const CurrentPost = styled.div`
   flex-direction: row;
 
   overflow: hidden;
-`;
+`
 
 const UserImage = styled.image`
   height: 27%;
   width: 11%;
   border-radius: 50%;
   background-color: green;
-`;
+`
 
 const Description = styled.div`
   height: 40%;
@@ -201,7 +207,7 @@ const Description = styled.div`
     font-family: "Lato", sans-serif;
     font-size: 20px;
   }
-`;
+`
 
 const InputLink = styled.input`
   margin-top: 5%;
@@ -209,7 +215,7 @@ const InputLink = styled.input`
   width: 100%;
   border: none;
   background-color: #efefef;
-`;
+`
 
 const InputDescription = styled.input`
   margin-top: 3%;
@@ -217,7 +223,7 @@ const InputDescription = styled.input`
   width: 100%;
   border: none;
   background-color: #efefef;
-`;
+`
 
 const PublishButt = styled.button`
   background-color: ${(props) => props.color};
@@ -232,4 +238,4 @@ const PublishButt = styled.button`
   font-size: 14px;
   line-height: 17px;
   cursor: ${(props) => props.cursor};
-`;
+`
