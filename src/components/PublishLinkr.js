@@ -52,7 +52,7 @@ export default function PublishLinkr({
 const Description = styled.div`
   height: 40%;
   width: 80%;
-
+  
   h2 {
     color: #707070;
     font-family: "Lato", sans-serif;
@@ -66,6 +66,7 @@ const InputLink = styled.input`
   width: 100%;
   border: none;
   background-color: #efefef;
+  border-radius: 5px;
 `;
 
 const InputDescription = styled.input`
@@ -74,6 +75,7 @@ const InputDescription = styled.input`
   width: 100%;
   border: none;
   background-color: #efefef;
+  border-radius: 5px;
 `;
 
 const PublishButt = styled.button`
