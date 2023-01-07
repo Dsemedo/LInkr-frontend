@@ -14,6 +14,7 @@ export default function Timeline() {
   const [logoutClicked, setLogoutClicked] = useState(false)
   const [publishedPosts, setPublishedPosts] = useState()
   const [hashtags, setHashtags] = useState()
+  const [attTimeline, setAttTimeline] = useState([])
 
   useEffect(() => {
     const config = {
@@ -37,7 +38,7 @@ export default function Timeline() {
       .catch((erro) => {
         console.log(erro)
       })
-  }, [])
+  }, [attTimeline])
 
   async function postLinkr(e) {
     e.preventDefault()
@@ -51,8 +52,10 @@ export default function Timeline() {
       })
       setDescription("")
       setLink("")
+      setAttTimeline([...attTimeline, 1])
       console.log(timelineData)
-      alert("oi")
+      alert("publicado")
+      setPublishClicked(false)
     } catch (err) {
       alert("Houve um erro ao publicar seu link")
       console.log(err)

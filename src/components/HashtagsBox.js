@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 export default function HashtagsBox({hashtags}) {
-  console.log(hashtags)
+  
   return (
     <Trendings>
       <Top>
@@ -9,7 +9,7 @@ export default function HashtagsBox({hashtags}) {
       </Top>
       <Hashtags>
         {hashtags && hashtags.map((e) => (
-          <p>{e.hashtag}</p>
+          <p key={e.id}>{e.hashtag}</p>
         ))}
       </Hashtags>
     </Trendings>
