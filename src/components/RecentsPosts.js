@@ -16,7 +16,7 @@ export default function RecentsPosts({ setPublishedPosts, publishedPosts }) {
         {publishedPosts.map((value, i) => (
           <Card key={value.id}>
             <ContainerLeft>
-              <UserImage />
+              <UserImage src={value.picture}/>
             </ContainerLeft>
             <ContainerRight>
               <PostDescription><ReactTagify colors={"blue"} tagClicked={(tag)=> navigate(`/hashtag/${tag}`)}>{value.description}</ReactTagify></PostDescription>
@@ -54,11 +54,10 @@ const PostUrl = styled.div`
   height: 50%;
 `;
 
-const UserImage = styled.image`
+const UserImage = styled.img`
   height: 30%;
   width: 60%;
   border-radius: 50%;
-  background-color: green;
 `;
 
 const ContainerRight = styled.div`

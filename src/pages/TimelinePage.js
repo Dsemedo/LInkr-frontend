@@ -6,6 +6,7 @@ import { BASE_URL } from "../constants/urls.js"
 import PublishLinkr from "../components/PublishLinkr.js"
 import RecentsPosts from "../components/RecentsPosts.js"
 import HashtagsBox from "../components/HashtagsBox.js"
+import { useNavigate } from "react-router-dom"
 
 export default function Timeline() {
   const [link, setLink] = useState("")
@@ -15,6 +16,8 @@ export default function Timeline() {
   const [publishedPosts, setPublishedPosts] = useState()
   const [hashtags, setHashtags] = useState()
   const [attTimeline, setAttTimeline] = useState([])
+  const [userData, serUserData] = useState()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const config = {
@@ -30,13 +33,24 @@ export default function Timeline() {
       .catch((erro) => {
         console.log(erro)
       })
-      axios
+    axios
       .get(`${BASE_URL}/hashtag`, config)
       .then((res) => {
         setHashtags(res.data)
       })
       .catch((erro) => {
         console.log(erro)
+      })
+    axios
+      .get(`${BASE_URL}/sign-in`, config)
+      .then((res) => {
+        serUserData(res.data)
+        console.log(res.data)
+      })
+      .catch((erro) => {
+        console.log(erro)
+        localStorage.removeItem("Bearer")
+        navigate("/")
       })
   }, [attTimeline])
 
@@ -68,6 +82,7 @@ export default function Timeline() {
       <Header>
         <h1>linkr</h1>
         <LogoutButton
+          userData={userData}
           logoutClicked={logoutClicked}
           setLogoutClicked={setLogoutClicked}
         />
@@ -76,7 +91,7 @@ export default function Timeline() {
         <TimelinePosts>
           <h1>timeline</h1>
           <CurrentPost>
-            <UserImage />
+            <UserImage src={userData && userData.picture} />
             <PublishLinkr
               description={description}
               setDescription={setDescription}
@@ -91,7 +106,7 @@ export default function Timeline() {
             setPublishedPosts={setPublishedPosts}
           />
         </TimelinePosts>
-        <HashtagsBox hashtags={hashtags}/>
+        <HashtagsBox hashtags={hashtags} />
       </ContainerTimeline>
     </Container>
   )
@@ -157,7 +172,7 @@ const CurrentPost = styled.div`
   overflow: hidden;
 `
 
-const UserImage = styled.image`
+const UserImage = styled.img`
   height: 27%;
   width: 11%;
   border-radius: 50%;
