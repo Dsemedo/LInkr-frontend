@@ -160,20 +160,19 @@ const TimelinePosts = styled.div`
 `
 
 const CurrentPost = styled.div`
-  height: 40%;
+  height: 30%;
   width: 100%;
   padding-top: 2%;
-  border-radius: 10px;
+  border-radius: 16px;
   background-color: #ffffff;
   display: flex;
   justify-content: space-around;
   flex-direction: row;
-
   overflow: hidden;
 `
 
 const UserImage = styled.img`
-  height: 27%;
+  height: 35%;
   width: 11%;
   border-radius: 50%;
   background-color: green;
