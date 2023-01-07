@@ -1,7 +1,9 @@
 import styled from "styled-components";
+import { ReactTagify } from "react-tagify";
+import { useNavigate } from "react-router-dom";
 
 export default function RecentsPosts({ setPublishedPosts, publishedPosts }) {
-
+  const navigate = useNavigate()
   if (publishedPosts === 0 || publishedPosts === undefined) {
     return (
       <>
@@ -17,7 +19,7 @@ export default function RecentsPosts({ setPublishedPosts, publishedPosts }) {
               <UserImage />
             </ContainerLeft>
             <ContainerRight>
-              <PostDescription>{value.description}</PostDescription>
+              <PostDescription><ReactTagify colors={"blue"} tagClicked={(tag)=> navigate(`/hashtag/${tag}`)}>{value.description}</ReactTagify></PostDescription>
               <PostUrl>{value.link}</PostUrl>
             </ContainerRight>
           </Card>
