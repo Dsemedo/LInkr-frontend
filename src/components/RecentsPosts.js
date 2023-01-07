@@ -64,7 +64,6 @@ const ContainerRight = styled.div`
   display: flex;
   flex-direction: column;
   width: 70%;
-  background-color: red;
 `;
 
 const ContainerLeft = styled.div`
@@ -73,5 +72,4 @@ const ContainerLeft = styled.div`
   align-items: center;
   flex-direction: column;
   width: 20%;
-  background-color: red;
 `;
