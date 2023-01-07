@@ -3,7 +3,7 @@ import arrowUp from "../assets/images/ArrowUp.png"
 import arrowDown from "../assets/images/ArrowDown.png"
 import { useNavigate } from "react-router-dom"
 
-export default function LogoutButton({logoutClicked, setLogoutClicked}) {
+export default function LogoutButton({logoutClicked, setLogoutClicked, userData}) {
   const navigate = useNavigate()
 
   return (
@@ -16,7 +16,7 @@ export default function LogoutButton({logoutClicked, setLogoutClicked}) {
               src={arrowUp}
               onClick={() => setLogoutClicked(false)}
             />
-            <UserLogout onClick={() => setLogoutClicked(!logoutClicked)}/>
+            <UserLogout src={userData && userData.picture} onClick={() => setLogoutClicked(!logoutClicked)}/>
           </ContainerLogout>
           <LogoutButt
             onClick={ async () => {
@@ -34,7 +34,7 @@ export default function LogoutButton({logoutClicked, setLogoutClicked}) {
             src={arrowDown}
             onClick={() => setLogoutClicked(true)}
           />
-          <UserLogout onClick={() => setLogoutClicked(!logoutClicked)}/>
+          <UserLogout src={userData && userData.picture} onClick={() => setLogoutClicked(!logoutClicked)}/>
         </Logout>
       )}
     </>
@@ -50,18 +50,12 @@ const Logout = styled.div`
   justify-content: space-around;
   margin-right: 1%;
   padding-top: 1%;
-
-  img {
-    width: 20%;
-    height: 20%;
-  }
 `
 
-const UserLogout = styled.image`
+const UserLogout = styled.img`
   height: 85%;
   width: 42%;
   border-radius: 50%;
-  background-color: green;
 `
 
 const LogoutButt = styled.div`
