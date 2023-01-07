@@ -1,55 +1,65 @@
-import styled from "styled-components";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import LogoutButton from "../components/LogoutButton.js";
-import { BASE_URL } from "../constants/urls.js";
-import PublishLinkr from "../components/PublishLinkr.js";
-import RecentsPosts from "../components/RecentsPosts.js";
+import styled from "styled-components"
+import { useEffect, useState } from "react"
+import axios from "axios"
+import LogoutButton from "../components/LogoutButton.js"
+import { BASE_URL } from "../constants/urls.js"
+import PublishLinkr from "../components/PublishLinkr.js"
+import RecentsPosts from "../components/RecentsPosts.js"
+import HashtagsBox from "../components/HashtagsBox.js"
 
 export default function Timeline() {
-  const [link, setLink] = useState("");
-  const [description, setDescription] = useState("");
-  const [publishClicked, setPublishClicked] = useState(false);
-  const [logoutClicked, setLogoutClicked] = useState(false);
-  // const [imageUser, setImageUser] = useState("");
-  const [publishedPosts, setPublishedPosts] = useState();
+  const [link, setLink] = useState("")
+  const [description, setDescription] = useState("")
+  const [publishClicked, setPublishClicked] = useState(false)
+  const [logoutClicked, setLogoutClicked] = useState(false)
+  const [publishedPosts, setPublishedPosts] = useState()
+  const [hashtags, setHashtags] = useState()
+  const [attTimeline, setAttTimeline] = useState([])
 
   useEffect(() => {
     const config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
       },
-    };
+    }
     axios
       .get(`${BASE_URL}/timeline`, config)
       .then((res) => {
-        setPublishedPosts(res.data);
+        setPublishedPosts(res.data)
       })
       .catch((erro) => {
-        console.log(erro);
-      });
-  }, []);
-
-  console.log(publishedPosts);
+        console.log(erro)
+      })
+      axios
+      .get(`${BASE_URL}/hashtag`, config)
+      .then((res) => {
+        setHashtags(res.data)
+      })
+      .catch((erro) => {
+        console.log(erro)
+      })
+  }, [attTimeline])
 
   async function postLinkr(e) {
-    e.preventDefault();
-    setPublishClicked(true);
-    const body = { link, description };
+    e.preventDefault()
+    setPublishClicked(true)
+    const body = { link, description }
     try {
       const timelineData = await axios.post(`${BASE_URL}/timeline`, body, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
         },
-      });
-      setDescription("");
-      setLink("");
-      console.log(timelineData);
-      alert("oi");
+      })
+      setDescription("")
+      setLink("")
+      setAttTimeline([...attTimeline, 1])
+      console.log(timelineData)
+      alert("publicado")
+      setPublishClicked(false)
     } catch (err) {
-      alert("Houve um erro ao publicar seu link");
-      console.log(err);
-      setPublishClicked(false);
+      alert("Houve um erro ao publicar seu link")
+      console.log(err)
+      setPublishClicked(false)
     }
   }
 
@@ -81,12 +91,10 @@ export default function Timeline() {
             setPublishedPosts={setPublishedPosts}
           />
         </TimelinePosts>
-        <Trendings>
-          <h1>trending</h1>
-        </Trendings>
+        <HashtagsBox hashtags={hashtags}/>
       </ContainerTimeline>
     </Container>
-  );
+  )
 }
 
 const Container = styled.div`
@@ -97,7 +105,7 @@ const Container = styled.div`
   background-color: #333333;
 
   overflow: scroll;
-`;
+`
 
 const Header = styled.div`
   height: 10vh;
@@ -113,7 +121,7 @@ const Header = styled.div`
     color: white;
     margin-left: 2%;
   }
-`;
+`
 
 const ContainerTimeline = styled.div`
   padding-top: 3%;
@@ -122,7 +130,7 @@ const ContainerTimeline = styled.div`
   justify-content: center;
   width: 100%;
   height: 60%;
-`;
+`
 
 const TimelinePosts = styled.div`
   width: 50%;
@@ -134,23 +142,7 @@ const TimelinePosts = styled.div`
     font-size: 43px;
     margin: 0 0 5% 0;
   }
-`;
-
-const Trendings = styled.div`
-  width: 25%;
-  height: 70vh;
-  margin: 5% 0 0 5vw;
-  border-radius: 4%;
-  background-color: #171717;
-  overflow: hidden;
-
-  h1 {
-    font-family: "Oswald", sans-serif;
-    color: white;
-    font-size: 35px;
-    margin: 4%;
-  }
-`;
+`
 
 const CurrentPost = styled.div`
   height: 40%;
@@ -163,11 +155,11 @@ const CurrentPost = styled.div`
   flex-direction: row;
 
   overflow: hidden;
-`;
+`
 
 const UserImage = styled.image`
   height: 27%;
   width: 11%;
   border-radius: 50%;
   background-color: green;
-`;
+`

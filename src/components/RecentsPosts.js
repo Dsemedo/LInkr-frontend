@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export default function RecentsPosts({ setPublishedPosts, publishedPosts }) {
-  console.log(publishedPosts);
 
   if (publishedPosts === 0 || publishedPosts === undefined) {
     return (
@@ -13,7 +12,7 @@ export default function RecentsPosts({ setPublishedPosts, publishedPosts }) {
     return (
       <>
         {publishedPosts.map((value, i) => (
-          <Card>
+          <Card key={value.id}>
             <ContainerLeft>
               <UserImage />
             </ContainerLeft>
