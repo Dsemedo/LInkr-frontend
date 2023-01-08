@@ -7,6 +7,7 @@ import PublishLinkr from "../components/PublishLinkr.js";
 import RecentsPosts from "../components/RecentsPosts.js";
 import HashtagsBox from "../components/HashtagsBox.js";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export default function Timeline() {
   const [link, setLink] = useState("");
@@ -15,11 +16,11 @@ export default function Timeline() {
   const [logoutClicked, setLogoutClicked] = useState(false);
   const [publishedPosts, setPublishedPosts] = useState();
   const [hashtags, setHashtags] = useState();
-  const [attTimeline, setAttTimeline] = useState([]);
   const [userData, serUserData] = useState();
   const [liked, setLiked] = useState(true);
   const navigate = useNavigate();
-
+  const params = useParams();
+console.log("PARAMS",typeof(params.hashtag))
   useEffect(() => {
     const config = {
       headers: {
@@ -27,7 +28,7 @@ export default function Timeline() {
       },
     };
     axios
-      .get(`${BASE_URL}/timeline`, config)
+      .get(`${BASE_URL}/hashtags/${params.hashtag}`, config)
       .then((res) => {
         setPublishedPosts(res.data);
       })
@@ -55,28 +56,6 @@ export default function Timeline() {
       });
   }, [navigate]);
 
-  async function postLinkr(e) {
-    e.preventDefault();
-    setPublishClicked(true);
-    const body = { link, description };
-    try {
-      const timelineData = await axios.post(`${BASE_URL}/timeline`, body, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
-        },
-      });
-      setDescription("");
-      setLink("");
-      setAttTimeline([...attTimeline, 1]);
-      console.log(timelineData);
-      alert("publicado");
-      setPublishClicked(false);
-    } catch (err) {
-      alert("Houve um erro ao publicar seu link");
-      console.log(err);
-      setPublishClicked(false);
-    }
-  }
 
   return (
     <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
@@ -90,18 +69,7 @@ export default function Timeline() {
       </Header>
       <ContainerTimeline>
         <TimelinePosts>
-          <h1>timeline</h1>
-          <CurrentPost>
-            <UserImage src={userData && userData.picture} />
-            <PublishLinkr
-              description={description}
-              setDescription={setDescription}
-              link={link}
-              setLink={setLink}
-              publishClicked={publishClicked}
-              postLinkr={postLinkr}
-            />
-          </CurrentPost>
+          <h1># {params.hashtag}</h1>
           <RecentsPosts
             publishedPosts={publishedPosts}
             setPublishedPosts={setPublishedPosts}

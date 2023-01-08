@@ -57,7 +57,7 @@ export default function RecentsPosts({
               <PostDescription>
                 <ReactTagify
                   colors={"blue"}
-                  tagClicked={(tag) => navigate(`/hashtag/${tag}`)}
+                  tagClicked={(tag) => navigate(`/hashtags/${tag.replace("#", "")}`)}
                 >
                   {value.description}
                 </ReactTagify>
