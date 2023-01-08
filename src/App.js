@@ -3,6 +3,7 @@ import GlobalStyles from "./assets/styles/GlobalStyle.js";
 import Login from "./pages/SignInPage.js";
 import Timeline from "./pages/TimelinePage.js";
 import Registration from "./pages/Registration.js"
+import Hashtag from "./pages/Hashtag.js"
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
         <Route path="/timeline" element={<Timeline />} />
         <Route path="/" element={<Login />} />
          <Route path="/registration" element={<Registration />} />
+         <Route path="/hashtags/:hashtag" element={<Hashtag />} />
       </Routes>
     </BrowserRouter>
   );
