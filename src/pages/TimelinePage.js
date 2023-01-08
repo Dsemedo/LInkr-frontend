@@ -33,7 +33,11 @@ export default function Timeline() {
       })
       .catch((erro) => {
         console.log(erro);
+        alert(
+          "An error occured while trying to fetch the posts, please refresh the page"
+        );
       });
+
     axios
       .get(`${BASE_URL}/hashtag`, config)
       .then((res) => {
@@ -42,6 +46,7 @@ export default function Timeline() {
       .catch((erro) => {
         console.log(erro);
       });
+
     axios
       .get(`${BASE_URL}/sign-in`, config)
       .then((res) => {
@@ -53,7 +58,7 @@ export default function Timeline() {
         localStorage.removeItem("Bearer");
         navigate("/");
       });
-  }, [navigate]);
+  }, [publishedPosts]);
 
   async function postLinkr(e) {
     e.preventDefault();
@@ -102,12 +107,17 @@ export default function Timeline() {
               postLinkr={postLinkr}
             />
           </CurrentPost>
-          <RecentsPosts
-            publishedPosts={publishedPosts}
-            setPublishedPosts={setPublishedPosts}
-            liked={liked}
-            setLiked={setLiked}
-          />
+
+          {publishedPosts === 0 ? (
+            alert("There are no posts yer")
+          ) : (
+            <RecentsPosts
+              publishedPosts={publishedPosts}
+              setPublishedPosts={setPublishedPosts}
+              liked={liked}
+              setLiked={setLiked}
+            />
+          )}
         </TimelinePosts>
         <HashtagsBox hashtags={hashtags} />
       </ContainerTimeline>
@@ -121,7 +131,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #333333;
-
   overflow: scroll;
 `;
 

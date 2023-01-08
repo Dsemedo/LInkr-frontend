@@ -79,8 +79,8 @@ export default function RecentsPosts({
 }
 
 const ContainerUrl = styled.div`
-  width: 50%;
-
+  width: 60%;
+  overflow: hidden;
   h1 {
     font-family: "Lato";
     font-style: normal;
