@@ -1,7 +1,9 @@
 import styled from "styled-components"
+import { ReactTagify } from "react-tagify";
+import { useNavigate } from "react-router-dom";
 
 export default function HashtagsBox({hashtags}) {
-  
+  const navigate = useNavigate();
   return (
     <Trendings>
       <Top>
@@ -9,7 +11,12 @@ export default function HashtagsBox({hashtags}) {
       </Top>
       <Hashtags>
         {hashtags && hashtags.map((e) => (
+          <ReactTagify
+          colors={"white"}
+          tagClicked={(tag) => navigate(`/hashtags/${tag.replace("#", "")}`)}
+        >
           <p key={e.id}>{e.hashtag}</p>
+          </ReactTagify>
         ))}
       </Hashtags>
     </Trendings>

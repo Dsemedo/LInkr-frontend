@@ -8,7 +8,7 @@ import HashtagsBox from "../components/HashtagsBox.js";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
-export default function Timeline() {
+export default function User() {
   const [logoutClicked, setLogoutClicked] = useState(false);
   const [publishedPosts, setPublishedPosts] = useState();
   const [hashtags, setHashtags] = useState();
@@ -16,7 +16,7 @@ export default function Timeline() {
   const [liked, setLiked] = useState(true);
   const navigate = useNavigate();
   const params = useParams();
-console.log("PARAMS",typeof(params.hashtag))
+  const id = Number(params.id);
   useEffect(() => {
     const config = {
       headers: {
@@ -24,7 +24,7 @@ console.log("PARAMS",typeof(params.hashtag))
       },
     };
     axios
-      .get(`${BASE_URL}/hashtags/${params.hashtag}`, config)
+      .get(`${BASE_URL}/user/${id}`, config)
       .then((res) => {
         setPublishedPosts(res.data);
       })
@@ -50,33 +50,37 @@ console.log("PARAMS",typeof(params.hashtag))
         localStorage.removeItem("Bearer");
         navigate("/");
       });
-  }, [navigate, params.hashtag]);
+  }, [navigate, id]);
 
-
-  return (
-    <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
-      <Header>
-        <h1>linkr</h1>
-        <LogoutButton
-          userData={userData}
-          logoutClicked={logoutClicked}
-          setLogoutClicked={setLogoutClicked}
-        />
-      </Header>
-      <ContainerTimeline>
-        <TimelinePosts>
-          <h1># {params.hashtag}</h1>
-          <RecentsPosts
-            publishedPosts={publishedPosts}
-            setPublishedPosts={setPublishedPosts}
-            liked={liked}
-            setLiked={setLiked}
+  if (publishedPosts !== undefined) {
+    return (
+      <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
+        <Header>
+          <h1>linkr</h1>
+          <LogoutButton
+            userData={userData}
+            logoutClicked={logoutClicked}
+            setLogoutClicked={setLogoutClicked}
           />
-        </TimelinePosts>
-        <HashtagsBox hashtags={hashtags} />
-      </ContainerTimeline>
-    </Container>
-  );
+        </Header>
+        <ContainerTimeline>
+          <TimelinePosts>
+            <Flex>
+            <PostUrl src={publishedPosts[0].picture} alt="LinkImage" />
+            <Feed>{publishedPosts[0].username} Posts</Feed>
+            </Flex>
+            <RecentsPosts
+              publishedPosts={publishedPosts}
+              setPublishedPosts={setPublishedPosts}
+              liked={liked}
+              setLiked={setLiked}
+            />
+          </TimelinePosts>
+          <HashtagsBox hashtags={hashtags} />
+        </ContainerTimeline>
+      </Container>
+    );
+  }
 }
 
 const Container = styled.div`
@@ -104,6 +108,13 @@ const Header = styled.div`
     margin-left: 2%;
   }
 `;
+const Feed = styled.span`
+ font-family: "Oswald", sans-serif;
+    color: white;
+    font-size: 43px;
+    margin: 0 0 5% 0;
+    padding-left: 18px;
+`
 
 const ContainerTimeline = styled.div`
   padding-top: 3%;
@@ -126,3 +137,18 @@ const TimelinePosts = styled.div`
   }
 `;
 
+const PostUrl = styled.img`
+  height: 50px;
+  width: 50px;
+  border-radius: 26.5px;
+  color: #b7b7b7;
+  margin-top: 1%;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #4d4d4d;
+  cursor: pointer;
+`;
+const Flex =  styled.div`
+display: flex;
+
+`
