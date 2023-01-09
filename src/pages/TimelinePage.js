@@ -16,7 +16,7 @@ export default function Timeline() {
   const [publishedPosts, setPublishedPosts] = useState();
   const [hashtags, setHashtags] = useState();
   const [attTimeline, setAttTimeline] = useState([]);
-  const [userData, serUserData] = useState();
+  const [userData, setUserData] = useState();
   const [liked, setLiked] = useState(true);
   const navigate = useNavigate();
 
@@ -47,11 +47,11 @@ export default function Timeline() {
     axios
       .get(`${BASE_URL}/sign-in`, config)
       .then((res) => {
-        serUserData(res.data);
-        console.log(res.data);
+        setUserData(res.data);
       })
       .catch((erro) => {
         console.log(erro);
+        alert("Deslogando");
         localStorage.removeItem("Bearer");
         navigate("/");
       });
@@ -83,7 +83,7 @@ export default function Timeline() {
   return (
     <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
       <Header>
-        <h1 nClick={() => navigate("/timeline")}>linkr</h1>
+        <h1 onClick={() => navigate("/timeline")}>linkr</h1>
         <LogoutButton
           userData={userData}
           logoutClicked={logoutClicked}
@@ -113,6 +113,8 @@ export default function Timeline() {
               setPublishedPosts={setPublishedPosts}
               liked={liked}
               setLiked={setLiked}
+              userData={userData}
+              setUserData={setUserData}
             />
           )}
         </TimelinePosts>

@@ -7,7 +7,6 @@ import Hashtag from "./pages/Hashtag.js"
 import User from "./pages/User.js"
 
 function App() {
-
   return (
     <BrowserRouter>
       <GlobalStyles />
