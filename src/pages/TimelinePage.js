@@ -51,7 +51,6 @@ export default function Timeline() {
       })
       .catch((erro) => {
         console.log(erro);
-        alert("Deslogando");
         localStorage.removeItem("Bearer");
         navigate("/");
       });

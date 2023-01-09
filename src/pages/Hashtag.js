@@ -70,6 +70,7 @@ export default function Timeline() {
             setPublishedPosts={setPublishedPosts}
             liked={liked}
             setLiked={setLiked}
+            userData={userData}
           />
         </TimelinePosts>
         <HashtagsBox hashtags={hashtags} />
@@ -125,4 +126,3 @@ const TimelinePosts = styled.div`
     margin: 0 0 5% 0;
   }
 `;
-
