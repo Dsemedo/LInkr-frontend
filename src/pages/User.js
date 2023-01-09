@@ -51,7 +51,35 @@ export default function User() {
         navigate("/");
       });
   }, [navigate, id]);
-
+  if(publishedPosts === undefined){
+   return ( 
+    <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
+    <Header>
+      <h1>linkr</h1>
+      <LogoutButton
+        userData={userData}
+        logoutClicked={logoutClicked}
+        setLogoutClicked={setLogoutClicked}
+      />
+    </Header>
+    <ContainerTimeline>
+      <TimelinePosts>
+        <Flex>
+        <PostUrl  />
+        <Feed> Posts</Feed>
+        </Flex>
+        <RecentsPosts
+          publishedPosts={publishedPosts}
+          setPublishedPosts={setPublishedPosts}
+          liked={liked}
+          setLiked={setLiked}
+        />
+      </TimelinePosts>
+      <HashtagsBox hashtags={hashtags} />
+    </ContainerTimeline>
+  </Container>
+     )
+  }
   if (publishedPosts !== undefined) {
     return (
       <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
