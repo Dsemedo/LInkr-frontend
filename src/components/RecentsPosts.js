@@ -6,6 +6,8 @@ import HeartLiked from "../assets/images/HeartLiked.png";
 import HeartUnliked from "../assets/images/HeartUnliked.png";
 import DeletePost from "../assets/images/DeletePost.png";
 import EditPost from "../assets/images/EditPost.png";
+// import axios from "axios";
+import { useState } from "react";
 
 export default function RecentsPosts({
   setPublishedPosts,
@@ -14,6 +16,15 @@ export default function RecentsPosts({
   liked,
 }) {
   const navigate = useNavigate();
+  const [edited, setEdited] = useState(false);
+  function deleteLinkr() {
+    alert("vou deletar hein");
+  }
+
+  function editLinkr() {
+    setEdited(true);
+    console.log(edited);
+  }
 
   function likeLinkr() {
     setLiked(!liked);
@@ -50,16 +61,22 @@ export default function RecentsPosts({
               <ContainerTopPost>
                 <h1>{value.username}</h1>
                 <PostOptions>
-                  <img src={EditPost} alt="aaa" />
-                  <img src={DeletePost} alt="aaa" />
+                  <img src={EditPost} alt="aaa" onClick={editLinkr} />
+                  <img src={DeletePost} alt="aaa" onClick={deleteLinkr} />
                 </PostOptions>
               </ContainerTopPost>
               <PostDescription>
                 <ReactTagify
                   colors={"blue"}
-                  tagClicked={(tag) => navigate(`/hashtags/${tag.replace("#", "")}`)}
+                  tagClicked={(tag) =>
+                    navigate(`/hashtags/${tag.replace("#", "")}`)
+                  }
                 >
-                  {value.description}
+                  {/* {edited ? (
+                    `${value.description}`
+                  ) : (
+                    <InputDescription>{value.description}</InputDescription>
+                  )} */}
                 </ReactTagify>
               </PostDescription>
               <PostUrl onClick={() => window.open(value.link, "_blank")}>
@@ -78,8 +95,17 @@ export default function RecentsPosts({
   }
 }
 
+// const InputDescription = styled.input`
+//   margin-top: 3%;
+//   height: 70%;
+//   width: 100%;
+//   border: none;
+//   background-color: #efefef;
+//   border-radius: 5px;
+// `;
+
 const ContainerUrl = styled.div`
-  width: 60%;
+  width: 55%;
   overflow: hidden;
   h1 {
     font-family: "Lato";

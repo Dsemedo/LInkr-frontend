@@ -20,7 +20,7 @@ export default function Timeline() {
   const [liked, setLiked] = useState(true);
   const navigate = useNavigate();
   const params = useParams();
-console.log("PARAMS",typeof(params.hashtag))
+  console.log("PARAMS", typeof params.hashtag);
   useEffect(() => {
     const config = {
       headers: {
@@ -56,11 +56,10 @@ console.log("PARAMS",typeof(params.hashtag))
       });
   }, [navigate]);
 
-
   return (
     <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
       <Header>
-        <h1>linkr</h1>
+        <h1 onClick={() => navigate("/timeline")}>linkr</h1>
         <LogoutButton
           userData={userData}
           logoutClicked={logoutClicked}
@@ -106,6 +105,7 @@ const Header = styled.div`
     font-size: 52px;
     color: white;
     margin-left: 2%;
+    cursor: pointer;
   }
 `;
 

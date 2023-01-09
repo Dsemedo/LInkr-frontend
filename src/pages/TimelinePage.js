@@ -32,10 +32,7 @@ export default function Timeline() {
         setPublishedPosts(res.data);
       })
       .catch((erro) => {
-        console.log(erro);
-        alert(
-          "An error occured while trying to fetch the posts, please refresh the page"
-        );
+        console.log(erro.details);
       });
 
     axios
@@ -86,7 +83,7 @@ export default function Timeline() {
   return (
     <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
       <Header>
-        <h1>linkr</h1>
+        <h1 nClick={() => navigate("/timeline")}>linkr</h1>
         <LogoutButton
           userData={userData}
           logoutClicked={logoutClicked}
@@ -147,6 +144,7 @@ const Header = styled.div`
     font-size: 52px;
     color: white;
     margin-left: 2%;
+    cursor: pointer;
   }
 `;
 
