@@ -37,10 +37,13 @@ export default function RecentsPosts({
       </>
     );
   } else {
+    console.log(publishedPosts)
     return (
       <>
         {publishedPosts.map((value, i) => (
+          
           <Card key={value.id}>
+            
             <ContainerLeft>
               <UserImage src={value.picture} />
               {liked ? (
@@ -59,7 +62,7 @@ export default function RecentsPosts({
             </ContainerLeft>
             <ContainerRight>
               <ContainerTopPost>
-                <h1>{value.username}</h1>
+                <h1 onClick={() => navigate(`/user/${value.userId}`)}>{value.username}</h1>
                 <PostOptions>
                   <img src={EditPost} alt="aaa" onClick={editLinkr} />
                   <img src={DeletePost} alt="aaa" onClick={deleteLinkr} />
