@@ -103,6 +103,7 @@ export default function User() {
               setPublishedPosts={setPublishedPosts}
               liked={liked}
               setLiked={setLiked}
+              userData={userData}
             />
           </TimelinePosts>
           <HashtagsBox hashtags={hashtags} />
