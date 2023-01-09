@@ -51,34 +51,35 @@ export default function User() {
         navigate("/");
       });
   }, [navigate, id]);
-  if(publishedPosts === undefined){
-   return ( 
-    <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
-    <Header>
-      <h1>linkr</h1>
-      <LogoutButton
-        userData={userData}
-        logoutClicked={logoutClicked}
-        setLogoutClicked={setLogoutClicked}
-      />
-    </Header>
-    <ContainerTimeline>
-      <TimelinePosts>
-        <Flex>
-        <PostUrl  />
-        <Feed> Posts</Feed>
-        </Flex>
-        <RecentsPosts
-          publishedPosts={publishedPosts}
-          setPublishedPosts={setPublishedPosts}
-          liked={liked}
-          setLiked={setLiked}
-        />
-      </TimelinePosts>
-      <HashtagsBox hashtags={hashtags} />
-    </ContainerTimeline>
-  </Container>
-     )
+  if (publishedPosts === undefined) {
+    return (
+      <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
+        <Header>
+          <h1>linkr</h1>
+          <LogoutButton
+            userData={userData}
+            logoutClicked={logoutClicked}
+            setLogoutClicked={setLogoutClicked}
+          />
+        </Header>
+        <ContainerTimeline>
+          <TimelinePosts>
+            <Flex>
+              <PostUrl />
+              <Feed> Posts</Feed>
+            </Flex>
+            <RecentsPosts
+              publishedPosts={publishedPosts}
+              setPublishedPosts={setPublishedPosts}
+              liked={liked}
+              setLiked={setLiked}
+              userData={userData}
+            />
+          </TimelinePosts>
+          <HashtagsBox hashtags={hashtags} />
+        </ContainerTimeline>
+      </Container>
+    );
   }
   if (publishedPosts !== undefined) {
     return (
@@ -94,8 +95,8 @@ export default function User() {
         <ContainerTimeline>
           <TimelinePosts>
             <Flex>
-            <PostUrl src={publishedPosts[0].picture} alt="LinkImage" />
-            <Feed>{publishedPosts[0].username} Posts</Feed>
+              <PostUrl src={publishedPosts[0].picture} alt="LinkImage" />
+              <Feed>{publishedPosts[0].username} Posts</Feed>
             </Flex>
             <RecentsPosts
               publishedPosts={publishedPosts}
@@ -137,12 +138,12 @@ const Header = styled.div`
   }
 `;
 const Feed = styled.span`
- font-family: "Oswald", sans-serif;
-    color: white;
-    font-size: 43px;
-    margin: 0 0 5% 0;
-    padding-left: 18px;
-`
+  font-family: "Oswald", sans-serif;
+  color: white;
+  font-size: 43px;
+  margin: 0 0 5% 0;
+  padding-left: 18px;
+`;
 
 const ContainerTimeline = styled.div`
   padding-top: 3%;
@@ -176,7 +177,6 @@ const PostUrl = styled.img`
   border: 1px solid #4d4d4d;
   cursor: pointer;
 `;
-const Flex =  styled.div`
-display: flex;
-
-`
+const Flex = styled.div`
+  display: flex;
+`;
