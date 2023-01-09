@@ -6,14 +6,92 @@ import HeartLiked from "../assets/images/HeartLiked.png";
 import HeartUnliked from "../assets/images/HeartUnliked.png";
 import DeletePost from "../assets/images/DeletePost.png";
 import EditPost from "../assets/images/EditPost.png";
+import axios from "axios";
+import { useState } from "react";
+import { BASE_URL } from "../constants/urls.js";
+import Modal from "react-modal";
 
 export default function RecentsPosts({
   setPublishedPosts,
   publishedPosts,
   setLiked,
   liked,
+  setUserData,
+  userData,
 }) {
   const navigate = useNavigate();
+  const [edited, setEdited] = useState(false);
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [idSelected, setIdSelected] = useState(0);
+  const [loaded, setLoaded] = useState(false);
+
+  const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      width: "350px",
+      height: "150px",
+      background: "#333333",
+      borderRadius: "50px",
+      transform: "translate(-50%, -50%)",
+      display: "flex",
+      alignItens: "center",
+      justifyContent: "space-around",
+      flexDirection: "column",
+    },
+  };
+
+  // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
+  Modal.setAppElement(document.getElementById("root"));
+
+  function openModal(id) {
+    setIsOpen(true);
+    setIdSelected(id);
+    setLoaded(false);
+  }
+
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+    subtitle.style.color = "#f00";
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  function deleteLinkr() {
+    setLoaded(true);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
+      },
+    };
+    const requisicao = axios.delete(
+      `${BASE_URL}/timeline/${idSelected}`,
+      config
+    );
+    requisicao
+      .then(() => {
+        setLoaded(true);
+        setPublishedPosts(
+          publishedPosts.filter((post) => post.id !== idSelected)
+        );
+        closeModal();
+        alert("Post apagado!");
+      })
+      .catch(() => {
+        closeModal();
+        alert("Não foi possivel excluir o post, tente novamente");
+      });
+  }
+
+  let subtitle;
+
+  function editLinkr() {
+    setEdited(true);
+  }
 
   function likeLinkr() {
     setLiked(!liked);
@@ -26,13 +104,10 @@ export default function RecentsPosts({
       </>
     );
   } else {
-    console.log(publishedPosts)
     return (
       <>
         {publishedPosts.map((value, i) => (
-          
           <Card key={value.id}>
-            
             <ContainerLeft>
               <UserImage src={value.picture} />
               {liked ? (
@@ -51,29 +126,72 @@ export default function RecentsPosts({
             </ContainerLeft>
             <ContainerRight>
               <ContainerTopPost>
-                <h1 onClick={() => navigate(`/user/${value.userId}`)}>{value.username}</h1>
-                <PostOptions>
-                  <img src={EditPost} alt="aaa" />
-                  <img src={DeletePost} alt="aaa" />
-                </PostOptions>
+                <p onClick={() => navigate(`/user/${value.userId}`)}>
+                  {value.username}
+                </p>
+
+                {userData.id === value.userId ? (
+                  <PostOptions>
+                    <img
+                      src={EditPost}
+                      alt="Edit Post"
+                      onClick={() => editLinkr()}
+                    />
+                    <img
+                      src={DeletePost}
+                      alt="Delete Post"
+                      onClick={() => openModal(value.id)}
+                    />
+                  </PostOptions>
+                ) : (
+                  ""
+                )}
               </ContainerTopPost>
               <PostDescription>
                 <ReactTagify
                   colors={"blue"}
-                  tagClicked={(tag) => navigate(`/hashtags/${tag.replace("#", "")}`)}
+                  tagClicked={(tag) =>
+                    navigate(`/hashtags/${tag.replace("#", "")}`)
+                  }
                 >
                   {value.description}
                 </ReactTagify>
               </PostDescription>
               <PostUrl onClick={() => window.open(value.link, "_blank")}>
                 <ContainerUrl>
-                  <h1>{value.urlTitle}</h1>
-                  <h2>{value.urlDescription}</h2>
-                  <h3>{value.link}</h3>
+                  <h2>{value.urlTitle}</h2>
+                  <h3>{value.urlDescription}</h3>
+                  <h4>{value.link}</h4>
                 </ContainerUrl>
                 <img src={value.urlImage} alt="LinkImage" />
               </PostUrl>
             </ContainerRight>
+            {loaded ? (
+              <Modal
+                isOpen={modalIsOpen}
+                onAfterOpen={afterOpenModal}
+                onRequestClose={closeModal}
+                style={customStyles}
+              >
+                <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Loading...</h2>
+              </Modal>
+            ) : (
+              <Modal
+                isOpen={modalIsOpen}
+                onAfterOpen={afterOpenModal}
+                onRequestClose={closeModal}
+                style={customStyles}
+              >
+                <h2 ref={(_subtitle) => (subtitle = _subtitle)}>
+                  Are you sure you want to delete this post?
+                </h2>
+
+                <div>
+                  <button onClick={() => closeModal()}>No, go back</button>
+                  <button onClick={() => deleteLinkr()}>Yes, delete it</button>
+                </div>
+              </Modal>
+            )}
           </Card>
         ))}
       </>
@@ -81,32 +199,60 @@ export default function RecentsPosts({
   }
 }
 
-const ContainerUrl = styled.div`
-  width: 50%;
+// const InputDescription = styled.input`
+//   margin-top: 3%;
+//   height: 70%;
+//   width: 100%;
+//   border: none;
+//   background-color: #efefef;
+//   border-radius: 5px;
+// `;
 
-  h1 {
+const ContainerUrl = styled.div`
+  width: 55%;
+  overflow: hidden;
+  h2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     font-family: "Lato";
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
+    line-height: 19px;
     color: #cecece;
+    margin-bottom: 2%;
   }
 
-  h2 {
+  h3 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
     font-family: "Lato";
     font-style: normal;
     font-weight: 400;
     font-size: 11px;
     color: #9b9595;
-    padding-bottom: 2%;
+    line-height: 13px;
+    margin-bottom: 2%;
   }
 
-  h3 {
+  h4 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     font-family: "Lato";
     font-style: normal;
     font-weight: 400;
     font-size: 11px;
-    top: 0;
+    line-height: 13px;
+    padding-bottom: 2%;
     color: #cecece;
   }
 `;
@@ -116,13 +262,13 @@ const ContainerTopPost = styled.div`
   height: 15%;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 2%;
 
-  h1 {
+  p {
     font-family: "Lato";
     font-style: normal;
     font-weight: 400;
     font-size: 19px;
+    color: #ffffff;
   }
 `;
 
@@ -162,6 +308,11 @@ const PostDescription = styled.div`
   width: 80%;
   height: 20%;
   color: ${lightGrey};
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 20px;
 `;
 
 const PostUrl = styled.div`

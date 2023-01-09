@@ -16,7 +16,7 @@ export default function Timeline() {
   const [publishedPosts, setPublishedPosts] = useState();
   const [hashtags, setHashtags] = useState();
   const [attTimeline, setAttTimeline] = useState([]);
-  const [userData, serUserData] = useState();
+  const [userData, setUserData] = useState();
   const [liked, setLiked] = useState(true);
   const navigate = useNavigate();
 
@@ -32,8 +32,9 @@ export default function Timeline() {
         setPublishedPosts(res.data);
       })
       .catch((erro) => {
-        console.log(erro);
+        console.log(erro.details);
       });
+
     axios
       .get(`${BASE_URL}/hashtags`, config)
       .then((res) => {
@@ -42,18 +43,19 @@ export default function Timeline() {
       .catch((erro) => {
         console.log(erro);
       });
+
     axios
       .get(`${BASE_URL}/sign-in`, config)
       .then((res) => {
-        serUserData(res.data);
-        console.log(res.data);
+        setUserData(res.data);
       })
       .catch((erro) => {
         console.log(erro);
+        alert("Deslogando");
         localStorage.removeItem("Bearer");
         navigate("/");
       });
-  }, [navigate]);
+  }, [publishedPosts]);
 
   async function postLinkr(e) {
     e.preventDefault();
@@ -81,7 +83,7 @@ export default function Timeline() {
   return (
     <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
       <Header>
-        <h1>linkr</h1>
+        <h1 onClick={() => navigate("/timeline")}>linkr</h1>
         <LogoutButton
           userData={userData}
           logoutClicked={logoutClicked}
@@ -102,12 +104,19 @@ export default function Timeline() {
               postLinkr={postLinkr}
             />
           </CurrentPost>
-          <RecentsPosts
-            publishedPosts={publishedPosts}
-            setPublishedPosts={setPublishedPosts}
-            liked={liked}
-            setLiked={setLiked}
-          />
+
+          {publishedPosts === 0 ? (
+            alert("There are no posts yer")
+          ) : (
+            <RecentsPosts
+              publishedPosts={publishedPosts}
+              setPublishedPosts={setPublishedPosts}
+              liked={liked}
+              setLiked={setLiked}
+              userData={userData}
+              setUserData={setUserData}
+            />
+          )}
         </TimelinePosts>
         <HashtagsBox hashtags={hashtags} />
       </ContainerTimeline>
@@ -121,7 +130,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #333333;
-
   overflow: scroll;
 `;
 
@@ -138,6 +146,7 @@ const Header = styled.div`
     font-size: 52px;
     color: white;
     margin-left: 2%;
+    cursor: pointer;
   }
 `;
 
