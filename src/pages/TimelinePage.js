@@ -32,7 +32,7 @@ export default function Timeline() {
         setPublishedPosts(res.data);
       })
       .catch((erro) => {
-        console.log(erro.details);
+        console.log(erro);
       });
 
     axios
@@ -54,7 +54,7 @@ export default function Timeline() {
         localStorage.removeItem("Bearer");
         navigate("/");
       });
-  }, [publishedPosts]);
+  }, [setPublishedPosts]);
 
   async function postLinkr(e) {
     e.preventDefault();

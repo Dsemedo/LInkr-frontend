@@ -24,6 +24,7 @@ export default function RecentsPosts({
   const [modalIsOpen, setIsOpen] = useState(false);
   const [idSelected, setIdSelected] = useState(0);
   const [loaded, setLoaded] = useState(false);
+  const [newDescription, setNewDescription] = useState("");
 
   const customStyles = {
     content: {
@@ -42,6 +43,8 @@ export default function RecentsPosts({
       flexDirection: "column",
     },
   };
+
+  let subtitle;
 
   // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
   Modal.setAppElement(document.getElementById("root"));
@@ -87,10 +90,8 @@ export default function RecentsPosts({
       });
   }
 
-  let subtitle;
-
   function editLinkr() {
-    setEdited(true);
+    setEdited(!edited);
   }
 
   function likeLinkr() {
@@ -147,16 +148,26 @@ export default function RecentsPosts({
                   ""
                 )}
               </ContainerTopPost>
-              <PostDescription>
-                <ReactTagify
-                  colors={"blue"}
-                  tagClicked={(tag) =>
-                    navigate(`/hashtags/${tag.replace("#", "")}`)
-                  }
-                >
-                  {value.description}
-                </ReactTagify>
-              </PostDescription>
+
+              {edited ? (
+                <PostDescription>
+                  <InputDescription
+                    onChange={(e) => setNewDescription(e.target.value)}
+                    value={[...value.description, newDescription]}
+                  />
+                </PostDescription>
+              ) : (
+                <PostDescription>
+                  <ReactTagify
+                    colors={"blue"}
+                    tagClicked={(tag) =>
+                      navigate(`/hashtags/${tag.replace("#", "")}`)
+                    }
+                  >
+                    {value.description}
+                  </ReactTagify>
+                </PostDescription>
+              )}
               <PostUrl onClick={() => window.open(value.link, "_blank")}>
                 <ContainerUrl>
                   <h2>{value.urlTitle}</h2>
@@ -199,14 +210,14 @@ export default function RecentsPosts({
   }
 }
 
-// const InputDescription = styled.input`
-//   margin-top: 3%;
-//   height: 70%;
-//   width: 100%;
-//   border: none;
-//   background-color: #efefef;
-//   border-radius: 5px;
-// `;
+const InputDescription = styled.input`
+  margin-top: 3%;
+  height: 70%;
+  width: 100%;
+  border: none;
+  background-color: #efefef;
+  border-radius: 5px;
+`;
 
 const ContainerUrl = styled.div`
   width: 55%;
