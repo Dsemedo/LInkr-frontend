@@ -10,7 +10,7 @@ export default function Search() {
 const [busca, setBusca] = useState("");
 const [user, setUser] = useState([]);
 useEffect(()=>{
-    if(busca.length > 1){
+    if(busca.length > 2){
         axios
     .get(`${BASE_URL}/users/${busca}`)
     .then((res) => {
