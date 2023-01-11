@@ -7,17 +7,16 @@ import HeartUnliked from "../assets/images/HeartUnliked.png";
 import DeletePost from "../assets/images/DeletePost.png";
 import EditPost from "../assets/images/EditPost.png";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { BASE_URL } from "../constants/urls.js";
 import Modal from "react-modal";
 
 export default function RecentsPosts({
   setPublishedPosts,
   publishedPosts,
-  setLiked,
-  liked,
-  setUserData,
   userData,
+  setAttTimeline,
+  attTimeline,
 }) {
   const navigate = useNavigate();
   const [edited, setEdited] = useState(false);
@@ -27,6 +26,7 @@ export default function RecentsPosts({
   const [newDescription, setNewDescription] = useState("");
   const [newLink, setNewLink] = useState("");
   const [loading, setLoading] = useState(false);
+  const [likeDisabled, setLikeDislebled] = useState("auto");
 
   const customStyles = {
     content: {
@@ -91,10 +91,6 @@ export default function RecentsPosts({
       });
   }
 
-  function likeLinkr() {
-    setLiked(!liked);
-  }
-
   function editLinkr(id, description, link) {
     setEdited(!edited);
     setIdSelected(id);
@@ -125,6 +121,49 @@ export default function RecentsPosts({
     }
   }
 
+  function likeLinkr(idPost) {
+    setLikeDislebled("none");
+    const body = { idPost };
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
+      },
+    };
+    const requisicao = axios.post(`${BASE_URL}/likes`, body, config);
+    requisicao
+      .then(() => {
+        setAttTimeline([...attTimeline, 1]);
+        setLikeDislebled("auto");
+        alert("curtido");
+      })
+      .catch((error) => {
+        setLikeDislebled("auto");
+        console.log(error);
+      });
+  }
+
+  function deleteLikeLinkr(idPost) {
+    console.log(idPost);
+    setLikeDislebled("none");
+    const body = { idPost };
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
+      },
+    };
+    const requisicao = axios.delete(`${BASE_URL}/likes`, body, config);
+    requisicao
+      .then(() => {
+        setAttTimeline([...attTimeline, 1]);
+        setLikeDislebled("auto");
+        alert("curtido");
+      })
+      .catch((error) => {
+        console.log(error);
+        setLikeDislebled("auto");
+      });
+  }
+
   const handleKeypress = (e) => {
     if (e.key === "Esc") {
       setEdited(false);
@@ -149,17 +188,19 @@ export default function RecentsPosts({
           <Card key={value.id}>
             <ContainerLeft>
               <UserImage src={value.picture} />
-              {liked ? (
+              {!value.usersWhoLiked.includes(userData.username) ? (
                 <RedHeart
                   src={HeartUnliked}
                   alt="Heart Unliked"
-                  onClick={likeLinkr}
+                  disabled={likeDisabled}
+                  onClick={() => likeLinkr(value.id)}
                 />
               ) : (
                 <RedHeart
                   src={HeartLiked}
                   alt="Heart Liked"
-                  onClick={likeLinkr}
+                  disabled={likeDisabled}
+                  onClick={() => deleteLikeLinkr(value.id)}
                 />
               )}
             </ContainerLeft>
@@ -343,6 +384,8 @@ const RedHeart = styled.img`
   width: 22px;
   height: 22px;
   margin-top: 30%;
+  cursor: pointer;
+  pointer-events: ${(props) => props.disabled};
 `;
 
 const Card = styled.div`

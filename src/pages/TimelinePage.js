@@ -116,6 +116,8 @@ export default function Timeline() {
               setLiked={setLiked}
               userData={userData}
               setUserData={setUserData}
+              setAttTimeline={setAttTimeline}
+              attTimeline={attTimeline}
             />
           )}
         </TimelinePosts>
