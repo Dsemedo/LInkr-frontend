@@ -18,13 +18,16 @@ export default function RecentsPosts({
   liked,
   setUserData,
   userData,
+  setAttTimeline,
+  attTimeline
 }) {
   const navigate = useNavigate();
   const [edited, setEdited] = useState(false);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [idSelected, setIdSelected] = useState(0);
   const [loaded, setLoaded] = useState(false);
-
+  const [likeDisabled, setLikeDislebled] = useState("auto")
+  
   const customStyles = {
     content: {
       top: "50%",
@@ -93,8 +96,53 @@ export default function RecentsPosts({
     setEdited(true);
   }
 
-  function likeLinkr() {
-    setLiked(!liked);
+  function likeLinkr(idPost) {
+    setLikeDislebled("none")
+    const body = {idPost}
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
+      },
+    };
+    const requisicao = axios.post(
+      `${BASE_URL}/likes`, body, 
+      config
+    );
+    requisicao
+    .then(() => {
+      setAttTimeline([...attTimeline, 1])
+      setLikeDislebled("auto")
+      alert("curtido") 
+    })
+    .catch((error) => {
+      setLikeDislebled("auto")
+      console.log(error)
+    })
+  }
+
+  function deleteLikeLinkr(idPost) {
+    console.log(idPost)
+    setLikeDislebled("none")
+    const body = {idPost}
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
+      },
+    };
+    const requisicao = axios.delete(
+      `${BASE_URL}/likes`, body, 
+      config
+    );
+    requisicao
+    .then(() => {
+      setAttTimeline([...attTimeline, 1])
+      setLikeDislebled("auto")
+      alert("curtido") 
+    })
+    .catch((error) => {
+      console.log(error)
+      setLikeDislebled("auto")
+    })
   }
 
   if (publishedPosts === 0 || publishedPosts === undefined) {
@@ -110,17 +158,19 @@ export default function RecentsPosts({
           <Card key={value.id}>
             <ContainerLeft>
               <UserImage src={value.picture} />
-              {liked ? (
+              {!value.usersWhoLiked.includes(userData.username) ? (
                 <RedHeart
                   src={HeartUnliked}
                   alt="Heart Unliked"
-                  onClick={likeLinkr}
+                  disabled={likeDisabled}
+                  onClick={() => likeLinkr(value.id)}
                 />
               ) : (
                 <RedHeart
                   src={HeartLiked}
                   alt="Heart Liked"
-                  onClick={likeLinkr}
+                  disabled={likeDisabled}
+                  onClick={() => deleteLikeLinkr(value.id)}
                 />
               )}
             </ContainerLeft>
@@ -289,6 +339,8 @@ const RedHeart = styled.img`
   width: 22px;
   height: 22px;
   margin-top: 30%;
+  cursor: pointer;
+  pointer-events: ${(props) => props.disabled} ;
 `;
 
 const Card = styled.div`
