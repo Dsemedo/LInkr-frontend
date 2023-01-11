@@ -7,6 +7,7 @@ import RecentsPosts from "../components/RecentsPosts.js";
 import HashtagsBox from "../components/HashtagsBox.js";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import Search from "../components/Search.js";
 
 export default function User() {
   const [logoutClicked, setLogoutClicked] = useState(false);
@@ -27,6 +28,7 @@ export default function User() {
       .get(`${BASE_URL}/user/${id}`, config)
       .then((res) => {
         setPublishedPosts(res.data);
+        console.log(publishedPosts)
       })
       .catch((erro) => {
         console.log(erro);
@@ -56,6 +58,7 @@ export default function User() {
       <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
         <Header>
           <h1>linkr</h1>
+          <Search />
           <LogoutButton
             userData={userData}
             logoutClicked={logoutClicked}
@@ -81,11 +84,39 @@ export default function User() {
       </Container>
     );
   }
-  if (publishedPosts !== undefined) {
+  if(publishedPosts !== undefined && publishedPosts[0].description === undefined){
+    console.log(publishedPosts)
     return (
       <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
         <Header>
           <h1>linkr</h1>
+          <Search />
+          <LogoutButton
+            userData={userData}
+            logoutClicked={logoutClicked}
+            setLogoutClicked={setLogoutClicked}
+          />
+        </Header>
+        <ContainerTimeline>
+          <TimelinePosts>
+            <Flex>
+              <PostUrl src={publishedPosts[0].picture} alt="LinkImage"/>
+              <Feed> {publishedPosts[0].username} Posts</Feed>
+            </Flex>
+            <Feed>Não há Posts deste usuário</Feed>
+          </TimelinePosts>
+          <HashtagsBox hashtags={hashtags} />
+        </ContainerTimeline>
+      </Container>
+    );
+  }
+  if (publishedPosts !== undefined && publishedPosts.length !== 0) {
+    console.log(publishedPosts)
+    return (
+      <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
+        <Header>
+          <h1>linkr</h1>
+          <Search />
           <LogoutButton
             userData={userData}
             logoutClicked={logoutClicked}

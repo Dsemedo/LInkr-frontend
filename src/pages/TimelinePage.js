@@ -6,6 +6,7 @@ import { BASE_URL } from "../constants/urls.js";
 import PublishLinkr from "../components/PublishLinkr.js";
 import RecentsPosts from "../components/RecentsPosts.js";
 import HashtagsBox from "../components/HashtagsBox.js";
+import Search from "../components/Search.js";
 import { useNavigate } from "react-router-dom";
 
 export default function Timeline() {
@@ -83,6 +84,7 @@ export default function Timeline() {
     <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
       <Header>
         <h1 onClick={() => navigate("/timeline")}>linkr</h1>
+        <Search />
         <LogoutButton
           userData={userData}
           logoutClicked={logoutClicked}
