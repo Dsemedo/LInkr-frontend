@@ -7,7 +7,7 @@ import HeartUnliked from "../assets/images/HeartUnliked.png";
 import DeletePost from "../assets/images/DeletePost.png";
 import EditPost from "../assets/images/EditPost.png";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BASE_URL } from "../constants/urls.js";
 import Modal from "react-modal";
 
@@ -25,6 +25,8 @@ export default function RecentsPosts({
   const [idSelected, setIdSelected] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [newDescription, setNewDescription] = useState("");
+  const [newLink, setNewLink] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const customStyles = {
     content: {
@@ -46,7 +48,6 @@ export default function RecentsPosts({
 
   let subtitle;
 
-  // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
   Modal.setAppElement(document.getElementById("root"));
 
   function openModal(id) {
@@ -90,13 +91,50 @@ export default function RecentsPosts({
       });
   }
 
-  function editLinkr() {
-    setEdited(!edited);
-  }
-
   function likeLinkr() {
     setLiked(!liked);
   }
+
+  function editLinkr(id, description, link) {
+    setEdited(!edited);
+    setIdSelected(id);
+    setNewDescription(description);
+    setNewLink(link);
+  }
+
+  async function handleSubmit() {
+    // e.preventDefault();
+    const body = { description: newDescription, link: newLink };
+    try {
+      const timelineData = await axios.patch(
+        `${BASE_URL}/timeline/${idSelected}`,
+        body,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
+          },
+        }
+      );
+      console.log(timelineData);
+      console.log(body);
+      setEdited(false);
+    } catch (err) {
+      alert("Houve um erro ao publicar seu link");
+      console.log(err);
+      setLoading(false);
+    }
+  }
+
+  const handleKeypress = (e) => {
+    if (e.key === "Esc") {
+      setEdited(false);
+    }
+
+    if (e.key === "Enter") {
+      handleSubmit();
+      setLoading(true);
+    }
+  };
 
   if (publishedPosts === 0 || publishedPosts === undefined) {
     return (
@@ -136,7 +174,9 @@ export default function RecentsPosts({
                     <img
                       src={EditPost}
                       alt="Edit Post"
-                      onClick={() => editLinkr()}
+                      onClick={() =>
+                        editLinkr(value.id, value.description, value.link)
+                      }
                     />
                     <img
                       src={DeletePost}
@@ -149,11 +189,14 @@ export default function RecentsPosts({
                 )}
               </ContainerTopPost>
 
-              {edited ? (
-                <PostDescription>
+              {edited && value.id === idSelected ? (
+                <PostDescription onSubmit={handleSubmit}>
                   <InputDescription
+                    type="text"
+                    value={newDescription}
                     onChange={(e) => setNewDescription(e.target.value)}
-                    value={[...value.description, newDescription]}
+                    onKeyPress={handleKeypress}
+                    disabled={loading}
                   />
                 </PostDescription>
               ) : (
