@@ -1,18 +1,17 @@
-import styled from "styled-components"
-import { ReactTagify } from "react-tagify"
-import { useNavigate } from "react-router-dom"
-import { lightGrey } from "../constants/colors"
-import HeartLiked from "../assets/images/HeartLiked.png"
-import HeartUnliked from "../assets/images/HeartUnliked.png"
-import DeletePost from "../assets/images/DeletePost.png"
-import EditPost from "../assets/images/EditPost.png"
-import axios from "axios"
-import { useState } from "react"
-import { BASE_URL } from "../constants/urls.js"
-import Modal from "react-modal"
-import { Tooltip as ReactTooltip } from "react-tooltip"
-import "react-tooltip/dist/react-tooltip.css"
-import { func } from "prop-types"
+import styled from "styled-components";
+import { ReactTagify } from "react-tagify";
+import { useNavigate } from "react-router-dom";
+import { lightGrey } from "../constants/colors";
+import HeartLiked from "../assets/images/HeartLiked.png";
+import HeartUnliked from "../assets/images/HeartUnliked.png";
+import DeletePost from "../assets/images/DeletePost.png";
+import EditPost from "../assets/images/EditPost.png";
+import axios from "axios";
+import { useState } from "react";
+import { BASE_URL } from "../constants/urls.js";
+import Modal from "react-modal";
+import { Tooltip as ReactTooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
 
 export default function RecentsPosts({
   setPublishedPosts,
@@ -21,15 +20,15 @@ export default function RecentsPosts({
   setAttTimeline,
   attTimeline,
 }) {
-  const navigate = useNavigate()
-  const [edited, setEdited] = useState(false)
-  const [modalIsOpen, setIsOpen] = useState(false)
-  const [idSelected, setIdSelected] = useState(0)
-  const [loaded, setLoaded] = useState(false)
-  const [newDescription, setNewDescription] = useState("")
-  const [newLink, setNewLink] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [likeDisabled, setLikeDislebled] = useState("auto")
+  const navigate = useNavigate();
+  const [edited, setEdited] = useState(false);
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [idSelected, setIdSelected] = useState(0);
+  const [loaded, setLoaded] = useState(false);
+  const [newDescription, setNewDescription] = useState("");
+  const [newLink, setNewLink] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [likeDisabled, setLikeDislebled] = useState("auto");
 
   const customStyles = {
     content: {
@@ -47,164 +46,155 @@ export default function RecentsPosts({
       justifyContent: "space-around",
       flexDirection: "column",
     },
-  }
+  };
 
-  let subtitle
+  let subtitle;
 
-  Modal.setAppElement(document.getElementById("root"))
+  Modal.setAppElement(document.getElementById("root"));
 
   function openModal(id) {
-    setIsOpen(true)
-    setIdSelected(id)
-    setLoaded(false)
+    setIsOpen(true);
+    setIdSelected(id);
+    setLoaded(false);
   }
 
   function afterOpenModal() {
-    subtitle.style.color = "#f00"
+    subtitle.style.color = "#f00";
   }
 
   function closeModal() {
-    setIsOpen(false)
+    setIsOpen(false);
   }
 
   function deleteLinkr() {
-    setLoaded(true)
+    setLoaded(true);
     const config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
       },
-    }
-    const request = axios.delete(
-      `${BASE_URL}/timeline/${idSelected}`,
-      config
-    )
+    };
+    const request = axios.delete(`${BASE_URL}/timeline/${idSelected}`, config);
     request
       .then(() => {
-        setLoaded(true)
+        setLoaded(true);
         setPublishedPosts(
           publishedPosts.filter((post) => post.id !== idSelected)
-        )
-        closeModal()
-        alert("Post apagado!")
+        );
+        closeModal();
+        alert("Post apagado!");
       })
       .catch(() => {
-        closeModal()
-        alert("Não foi possivel excluir o post, tente novamente")
-      })
+        closeModal();
+        alert("Não foi possivel excluir o post, tente novamente");
+      });
   }
 
   function editLinkr(id, description, link) {
-    setEdited(!edited)
-    setIdSelected(id)
-    setNewDescription(description)
-    setNewLink(link)
+    setEdited(!edited);
+    setIdSelected(id);
+    setNewDescription(description);
+    setNewLink(link);
   }
 
   async function handleSubmit() {
-    const body = { description: newDescription, link: newLink }
+    const body = { description: newDescription, link: newLink };
     try {
-      const timelineData = await axios.patch(
-        `${BASE_URL}/timeline/${idSelected}`,
-        body,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
-          },
-        }
-      )
-      setAttTimeline([...attTimeline, 1])
-      setEdited(false)
+      await axios.patch(`${BASE_URL}/timeline/${idSelected}`, body, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
+        },
+      });
+      setAttTimeline([...attTimeline, 1]);
+      setEdited(false);
     } catch (err) {
-      alert("Houve um erro ao publicar seu link")
-      console.log(err)
-      setLoading(false)
+      alert("Houve um erro ao publicar seu link");
+      console.log(err);
+      setLoading(false);
     }
   }
 
   function likeLinkr(idPost) {
-    setLikeDislebled("none")
-    let body
+    setLikeDislebled("none");
+    let body;
     const config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
       },
-    }
-    const request = axios.post(`${BASE_URL}/likes/${idPost}`, body, config)
+    };
+    const request = axios.post(`${BASE_URL}/likes/${idPost}`, body, config);
     request
       .then(() => {
-        setAttTimeline([...attTimeline, 1])
-        setLikeDislebled("auto")
-        alert("curtido")
+        setAttTimeline([...attTimeline, 1]);
+        setLikeDislebled("auto");
       })
       .catch((error) => {
-        setLikeDislebled("auto")
-        console.log(error)
-      })
+        setLikeDislebled("auto");
+        console.log(error);
+      });
   }
 
   function deleteLikeLinkr(idPost) {
-    setLikeDislebled("none")
-    const body = { idPost }
+    setLikeDislebled("none");
     const config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
       },
-    }
-    const request = axios.delete(`${BASE_URL}/likes/${idPost}`, config)
+    };
+    const request = axios.delete(`${BASE_URL}/likes/${idPost}`, config);
     request
       .then(() => {
-        setAttTimeline([...attTimeline, 1])
-        setLikeDislebled("auto")
-        alert("descurtido")
+        setAttTimeline([...attTimeline, 1]);
+        setLikeDislebled("auto");
+        alert("descurtido");
       })
       .catch((error) => {
-        setLikeDislebled("auto")
-        console.log(error)
-      })
+        setLikeDislebled("auto");
+        console.log(error);
+      });
   }
 
   function peoplesWhoLiked(peoples) {
     if (!peoples[0]) {
-      return "0 pessoas"
+      return "0 pessoas";
     }
     if (peoples.length === 1) {
-      return `${peoples[0]} e outras 0 pessoas`
+      return `${peoples[0]} e outras 0 pessoas`;
     }
     if (peoples.length === 2) {
-      return `${peoples[0]}, ${peoples[1]}, e outras 0 pessoas`
+      return `${peoples[0]}, ${peoples[1]}, e outras 0 pessoas`;
     }
     return `${peoples[0]}, ${peoples[1]}, e outras ${
       peoples.length - 2
-    } pessoas`
+    } pessoas`;
   }
 
   function peoplesWhoLiked2(peoples) {
     if (peoples.length === 1) {
-      return `Você e outras 0 pessoas`
+      return `Você e outras 0 pessoas`;
     }
     if (peoples.length === 2) {
-      return `Você, ${peoples[1]}, e outras 0 pessoas`
+      return `Você, ${peoples[1]}, e outras 0 pessoas`;
     }
-    return `Você, ${peoples[1]}, e outras ${peoples.length - 2} pessoas`
+    return `Você, ${peoples[1]}, e outras ${peoples.length - 2} pessoas`;
   }
 
   const handleKeypress = (e) => {
     if (e.key === "Esc") {
-      setEdited(false)
+      setEdited(false);
     }
 
     if (e.key === "Enter") {
-      handleSubmit()
-      setLoading(true)
+      handleSubmit();
+      setLoading(true);
     }
-  }
+  };
 
   if (publishedPosts === 0 || publishedPosts === undefined) {
     return (
       <>
         <h1>Loading</h1>
       </>
-    )
+    );
   } else {
     return (
       <>
@@ -293,7 +283,7 @@ export default function RecentsPosts({
               ) : (
                 <PostDescription>
                   <ReactTagify
-                    colors={"blue"}
+                    colors={"white"}
                     tagClicked={(tag) =>
                       navigate(`/hashtags/${tag.replace("#", "")}`)
                     }
@@ -340,7 +330,7 @@ export default function RecentsPosts({
           </Card>
         ))}
       </>
-    )
+    );
   }
 }
 
@@ -351,7 +341,7 @@ const InputDescription = styled.input`
   border: none;
   background-color: #efefef;
   border-radius: 5px;
-`
+`;
 
 const ContainerUrl = styled.div`
   width: 55%;
@@ -400,13 +390,13 @@ const ContainerUrl = styled.div`
     padding-bottom: 2%;
     color: #cecece;
   }
-`
+`;
 
 const TextLike = styled.p`
   color: white;
   font-family: "Lato";
   margin-top: 10px;
-`
+`;
 
 const ContainerTopPost = styled.div`
   width: 100%;
@@ -420,8 +410,9 @@ const ContainerTopPost = styled.div`
     font-weight: 400;
     font-size: 19px;
     color: #ffffff;
+    cursor: pointer;
   }
-`
+`;
 
 const PostOptions = styled.div`
   width: 10%;
@@ -434,7 +425,7 @@ const PostOptions = styled.div`
     height: 50%;
     cursor: pointer;
   }
-`
+`;
 
 const RedHeart = styled.img`
   width: 22px;
@@ -442,7 +433,7 @@ const RedHeart = styled.img`
   margin-top: 30%;
   cursor: pointer;
   pointer-events: ${(props) => props.disabled};
-`
+`;
 
 const Card = styled.div`
   height: 35%;
@@ -458,7 +449,7 @@ const Card = styled.div`
   @media (max-width: 900px) {
     border-radius: 0px;
   }
-`
+`;
 
 const PostDescription = styled.div`
   width: 80%;
@@ -469,7 +460,7 @@ const PostDescription = styled.div`
   font-weight: 400;
   font-size: 17px;
   line-height: 20px;
-`
+`;
 
 const PostUrl = styled.div`
   width: 100%;
@@ -486,20 +477,20 @@ const PostUrl = styled.div`
     width: 40%;
     height: 100%;
   }
-`
+`;
 
 const UserImage = styled.img`
   height: 65px;
   width: 65px;
   border-radius: 50%;
-`
+`;
 
 const ContainerRight = styled.div`
   display: flex;
   flex-direction: column;
   width: 81%;
   height: 100%;
-`
+`;
 
 const ContainerLeft = styled.div`
   display: flex;
@@ -507,4 +498,4 @@ const ContainerLeft = styled.div`
   align-items: center;
   flex-direction: column;
   width: 11%;
-`
+`;

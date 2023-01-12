@@ -15,6 +15,7 @@ export default function User() {
   const [hashtags, setHashtags] = useState();
   const [userData, serUserData] = useState();
   const [liked, setLiked] = useState(true);
+  const [followed, setFollowed] = useState(false);
   const navigate = useNavigate();
   const params = useParams();
   const id = Number(params.id);
@@ -28,7 +29,6 @@ export default function User() {
       .get(`${BASE_URL}/user/${id}`, config)
       .then((res) => {
         setPublishedPosts(res.data);
-        console.log(publishedPosts)
       })
       .catch((erro) => {
         console.log(erro);
@@ -45,7 +45,6 @@ export default function User() {
       .get(`${BASE_URL}/sign-in`, config)
       .then((res) => {
         serUserData(res.data);
-        console.log(res.data);
       })
       .catch((erro) => {
         console.log(erro);
@@ -53,11 +52,12 @@ export default function User() {
         navigate("/");
       });
   }, [navigate, id]);
+
   if (publishedPosts === undefined) {
     return (
       <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
         <Header>
-          <h1>linkr</h1>
+          <h1 onClick={() => navigate("/timeline")}>linkr</h1>
           <Search />
           <LogoutButton
             userData={userData}
@@ -67,10 +67,6 @@ export default function User() {
         </Header>
         <ContainerTimeline>
           <TimelinePosts>
-            <Flex>
-              <PostUrl />
-              <Feed> Posts</Feed>
-            </Flex>
             <RecentsPosts
               publishedPosts={publishedPosts}
               setPublishedPosts={setPublishedPosts}
@@ -79,39 +75,16 @@ export default function User() {
               userData={userData}
             />
           </TimelinePosts>
-          <HashtagsBox hashtags={hashtags} />
+          {/* <HashtagsBox hashtags={hashtags} /> */}
         </ContainerTimeline>
       </Container>
     );
   }
-  if(publishedPosts !== undefined && publishedPosts[0].description === undefined){
-    console.log(publishedPosts)
-    return (
-      <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
-        <Header>
-          <h1>linkr</h1>
-          <Search />
-          <LogoutButton
-            userData={userData}
-            logoutClicked={logoutClicked}
-            setLogoutClicked={setLogoutClicked}
-          />
-        </Header>
-        <ContainerTimeline>
-          <TimelinePosts>
-            <Flex>
-              <PostUrl src={publishedPosts[0].picture} alt="LinkImage"/>
-              <Feed> {publishedPosts[0].username} Posts</Feed>
-            </Flex>
-            <Feed>Não há Posts deste usuário</Feed>
-          </TimelinePosts>
-          <HashtagsBox hashtags={hashtags} />
-        </ContainerTimeline>
-      </Container>
-    );
-  }
-  if (publishedPosts !== undefined && publishedPosts.length !== 0) {
-    console.log(publishedPosts)
+  if (
+    publishedPosts !== undefined &&
+    publishedPosts[0].description === undefined
+  ) {
+    console.log(publishedPosts);
     return (
       <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
         <Header>
@@ -127,7 +100,33 @@ export default function User() {
           <TimelinePosts>
             <Flex>
               <PostUrl src={publishedPosts[0].picture} alt="LinkImage" />
-              <Feed>{publishedPosts[0].username} Posts</Feed>
+              <Feed> {publishedPosts[0].username} Posts</Feed>
+            </Flex>
+            <Feed>Não há Posts deste usuário</Feed>
+          </TimelinePosts>
+          <HashtagsBox hashtags={hashtags} />
+        </ContainerTimeline>
+      </Container>
+    );
+  }
+
+  if (userData.id === publishedPosts[0].userId) {
+    return (
+      <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
+        <Header>
+          <h1 onClick={() => navigate("/timeline")}>linkr</h1>
+          <Search />
+          <LogoutButton
+            userData={userData}
+            logoutClicked={logoutClicked}
+            setLogoutClicked={setLogoutClicked}
+          />
+        </Header>
+        <ContainerTimeline>
+          <TimelinePosts>
+            <Flex>
+              <PostUrl src={publishedPosts[0].picture} alt="LinkImage" />
+              <Feed>{publishedPosts[0].username} posts</Feed>
             </Flex>
             <RecentsPosts
               publishedPosts={publishedPosts}
@@ -137,12 +136,86 @@ export default function User() {
               userData={userData}
             />
           </TimelinePosts>
-          <HashtagsBox hashtags={hashtags} />
+          <RightContainer>
+            <HashtagsBox hashtags={hashtags} />
+          </RightContainer>
+        </ContainerTimeline>
+      </Container>
+    );
+  }
+  if (publishedPosts !== undefined && publishedPosts.length !== 0) {
+    return (
+      <Container onClick={() => logoutClicked && setLogoutClicked(false)}>
+        <Header>
+          <h1 onClick={() => navigate("/timeline")}>linkr</h1>
+          <Search />
+          <LogoutButton
+            userData={userData}
+            logoutClicked={logoutClicked}
+            setLogoutClicked={setLogoutClicked}
+          />
+        </Header>
+        <ContainerTimeline>
+          <TimelinePosts>
+            <Flex>
+              <PostUrl src={publishedPosts[0].picture} alt="LinkImage" />
+              <Feed>{publishedPosts[0].username} posts</Feed>
+            </Flex>
+            <RecentsPosts
+              publishedPosts={publishedPosts}
+              setPublishedPosts={setPublishedPosts}
+              liked={liked}
+              setLiked={setLiked}
+              userData={userData}
+            />
+          </TimelinePosts>
+          <RightContainer>
+            {followed ? (
+              <Follow
+                backColor={`#ffffff`}
+                color={`#1877F2`}
+                onClick={() => setFollowed(false)}
+              >
+                Unfollow
+              </Follow>
+            ) : (
+              <Follow
+                backColor={`#1877F2`}
+                color={`#ffffff`}
+                onClick={() => setFollowed(true)}
+              >
+                Follow
+              </Follow>
+            )}
+
+            <HashtagsBox hashtags={hashtags} />
+          </RightContainer>
         </ContainerTimeline>
       </Container>
     );
   }
 }
+
+const Follow = styled.button`
+  width: 112px;
+  height: 31px;
+  background-color: ${(props) => props.backColor};
+  color: ${(props) => props.color};
+  font-family: "Lato";
+  font-weight: 700;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+`;
+
+const RightContainer = styled.div`
+  width: 30%;
+  /* background-color: red; */
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 2%;
+`;
 
 const Container = styled.div`
   width: 100%;
@@ -150,7 +223,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #333333;
-
   overflow: scroll;
 `;
 
@@ -167,6 +239,7 @@ const Header = styled.div`
     font-size: 52px;
     color: white;
     margin-left: 2%;
+    cursor: pointer;
   }
 `;
 const Feed = styled.span`
@@ -189,7 +262,6 @@ const ContainerTimeline = styled.div`
 const TimelinePosts = styled.div`
   width: 50%;
   height: 100vh;
-
   h1 {
     font-family: "Oswald", sans-serif;
     color: white;
@@ -203,7 +275,6 @@ const PostUrl = styled.img`
   width: 50px;
   border-radius: 26.5px;
   color: #b7b7b7;
-  margin-top: 1%;
   display: flex;
   justify-content: space-between;
   border: 1px solid #4d4d4d;

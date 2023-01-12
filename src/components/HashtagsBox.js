@@ -27,9 +27,9 @@ export default function HashtagsBox({ hashtags }) {
 }
 
 const Trendings = styled.div`
-  width: 25%;
+  width: 70%;
   height: 70vh;
-  margin: 5% 0 0 5vw;
+  margin-top: 10%;
   border-radius: 4%;
   background-color: #171717;
   overflow: hidden;
