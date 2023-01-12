@@ -33,6 +33,9 @@ const Trendings = styled.div`
   border-radius: 4%;
   background-color: #171717;
   overflow: hidden;
+  @media (max-width: 900px) {
+    display: none;
+  }
 `;
 const Top = styled.div`
   border-bottom: 1px solid #484848;
