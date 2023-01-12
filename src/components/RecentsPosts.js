@@ -455,6 +455,9 @@ const Card = styled.div`
   justify-content: space-around;
   flex-direction: row;
   overflow: hidden;
+  @media (max-width: 900px) {
+    border-radius: 0px;
+  }
 `
 
 const PostDescription = styled.div`
