@@ -55,7 +55,7 @@ export default function Timeline() {
         localStorage.removeItem("Bearer");
         navigate("/");
       });
-  }, [setPublishedPosts]);
+  }, [setPublishedPosts, attTimeline]);
 
   async function postLinkr(e) {
     e.preventDefault();

@@ -60,7 +60,6 @@ export default function RecentsPosts({
   }
 
   function afterOpenModal() {
-    // references are now sync'd and can be accessed.
     subtitle.style.color = "#f00"
   }
 
@@ -75,11 +74,11 @@ export default function RecentsPosts({
         Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
       },
     }
-    const requisicao = axios.delete(
+    const request = axios.delete(
       `${BASE_URL}/timeline/${idSelected}`,
       config
     )
-    requisicao
+    request
       .then(() => {
         setLoaded(true)
         setPublishedPosts(
@@ -102,7 +101,6 @@ export default function RecentsPosts({
   }
 
   async function handleSubmit() {
-    // e.preventDefault();
     const body = { description: newDescription, link: newLink }
     try {
       const timelineData = await axios.patch(
@@ -114,8 +112,7 @@ export default function RecentsPosts({
           },
         }
       )
-      console.log(timelineData)
-      console.log(body)
+      setAttTimeline([...attTimeline, 1])
       setEdited(false)
     } catch (err) {
       alert("Houve um erro ao publicar seu link")
@@ -126,14 +123,14 @@ export default function RecentsPosts({
 
   function likeLinkr(idPost) {
     setLikeDislebled("none")
-    const body = { idPost }
+    let body
     const config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
       },
     }
-    const requisicao = axios.post(`${BASE_URL}/likes`, body, config)
-    requisicao
+    const request = axios.post(`${BASE_URL}/likes/${idPost}`, body, config)
+    request
       .then(() => {
         setAttTimeline([...attTimeline, 1])
         setLikeDislebled("auto")
@@ -146,7 +143,6 @@ export default function RecentsPosts({
   }
 
   function deleteLikeLinkr(idPost) {
-    console.log(idPost)
     setLikeDislebled("none")
     const body = { idPost }
     const config = {
@@ -154,16 +150,16 @@ export default function RecentsPosts({
         Authorization: `Bearer ${localStorage.getItem("Bearer")}`,
       },
     }
-    const requisicao = axios.delete(`${BASE_URL}/likes`, body, config)
-    requisicao
+    const request = axios.delete(`${BASE_URL}/likes/${idPost}`, config)
+    request
       .then(() => {
         setAttTimeline([...attTimeline, 1])
         setLikeDislebled("auto")
-        alert("curtido")
+        alert("descurtido")
       })
       .catch((error) => {
-        console.log(error)
         setLikeDislebled("auto")
+        console.log(error)
       })
   }
 
@@ -187,9 +183,9 @@ export default function RecentsPosts({
       return `Você e outras 0 pessoas`
     }
     if (peoples.length === 2) {
-      return `Você, ${peoples[0]}, e outras 0 pessoas`
+      return `Você, ${peoples[1]}, e outras 0 pessoas`
     }
-    return `Você, ${peoples[0]}, e outras ${peoples.length - 2} pessoas`
+    return `Você, ${peoples[1]}, e outras ${peoples.length - 2} pessoas`
   }
 
   const handleKeypress = (e) => {
