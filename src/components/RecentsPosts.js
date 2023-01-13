@@ -19,6 +19,7 @@ export default function RecentsPosts({
   userData,
   setAttTimeline,
   attTimeline,
+  errorMessages,
 }) {
   const navigate = useNavigate();
   const [edited, setEdited] = useState(false);
@@ -189,10 +190,10 @@ export default function RecentsPosts({
     }
   };
 
-  if (publishedPosts === 0 || publishedPosts === undefined) {
+  if (publishedPosts === undefined) {
     return (
       <>
-        <h1>Loading</h1>
+        <h1>{errorMessages}</h1>
       </>
     );
   } else {

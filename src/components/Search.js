@@ -1,32 +1,34 @@
-import styled from "styled-components"
-import axios from "axios"
-import { DebounceInput } from "react-debounce-input"
-import { useState } from "react"
-import { useEffect } from "react"
-import { BASE_URL } from "../constants/urls.js"
-import { Link } from "react-router-dom"
+import styled from "styled-components";
+import axios from "axios";
+import { DebounceInput } from "react-debounce-input";
+import { useState } from "react";
+import { useEffect } from "react";
+import { BASE_URL } from "../constants/urls.js";
+import { Link } from "react-router-dom";
 
 export default function Search() {
-  const [busca, setBusca] = useState("")
-  const [user, setUser] = useState([])
+  const [busca, setBusca] = useState("");
+  const [user, setUser] = useState([]);
   useEffect(() => {
     if (busca.length > 2) {
       axios
         .get(`${BASE_URL}/users/${busca}`)
         .then((res) => {
-          setUser(res.data)
+          setUser(res.data);
         })
         .catch((erro) => {
-          console.log(erro.details)
-        })
+          console.log(erro.details);
+        });
     } else {
-      setUser()
+      setUser();
     }
-  }, [busca])
+  }, [busca]);
   return (
     <SearchBox>
       <DebounceInput
         type="text"
+        backgroundColor="red"
+        width="100%"
         placeholder="Search for people"
         minLength={3}
         autoComplete="false"
@@ -49,7 +51,7 @@ export default function Search() {
         </UsersFind>
       ))}
     </SearchBox>
-  )
+  );
 }
 
 const SearchBox = styled.div`
@@ -71,14 +73,14 @@ const SearchBox = styled.div`
       outline: none;
     }
   }
-`
+`;
 const UsersFind = styled.div`
   width: 100%;
   display: flex;
   height: 45px;
   align-items: center;
   background-color: #e7e7e7;
-`
+`;
 const DivSpan = styled.div`
   display: flex;
   align-items: center;
@@ -88,7 +90,7 @@ const DivSpan = styled.div`
     font-size: 23px;
     padding-left: 10px;
   }
-`
+`;
 
 const DivImagem = styled.div`
   img {
@@ -96,7 +98,7 @@ const DivImagem = styled.div`
     height: 39px;
     border-radius: 304px;
   }
-`
+`;
 const Flex = styled.div`
   display: flex;
-`
+`;

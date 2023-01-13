@@ -19,6 +19,7 @@ export default function Timeline() {
   const [attTimeline, setAttTimeline] = useState([]);
   const [userData, setUserData] = useState();
   const [liked, setLiked] = useState(true);
+  const [errorMessages, setErrorMessages] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,10 +31,16 @@ export default function Timeline() {
     axios
       .get(`${BASE_URL}/timeline`, config)
       .then((res) => {
-        setPublishedPosts(res.data);
+        console.log(res.data);
+        if (typeof res.data === "string") {
+          setErrorMessages(res.data);
+        } else {
+          setPublishedPosts(res.data);
+        }
       })
       .catch((erro) => {
-        console.log(erro);
+        console.log(erro.response.data);
+        setErrorMessages(erro.response.data);
       });
 
     axios
@@ -107,7 +114,7 @@ export default function Timeline() {
           </CurrentPost>
 
           {publishedPosts === 0 ? (
-            alert("There are no posts yer")
+            alert("There are no posts yet")
           ) : (
             <RecentsPosts
               publishedPosts={publishedPosts}
@@ -118,6 +125,7 @@ export default function Timeline() {
               setUserData={setUserData}
               setAttTimeline={setAttTimeline}
               attTimeline={attTimeline}
+              errorMessages={errorMessages}
             />
           )}
         </TimelinePosts>
